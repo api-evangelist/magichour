@@ -1,0 +1,82 @@
+aid: magichour
+name: Magic Hour
+description: >-
+  Magic Hour is an AI media generation platform for video, image and audio, exposed as a public
+  REST API. The contract is an OpenAPI 3.0 document of 33 paths and 36 operations served from
+  api.magichour.ai with bearer authentication, covering generators for headshots, clothes
+  changing, face editing, GIFs, image editing and upscaling, plus video and audio synthesis.
+  Operations are priced in credits and the documentation states the credit cost per call.
+  Magic Hour publishes two llms.txt files — one on the marketing site and a different one on the
+  docs host — plus a 653KB llms-full.txt, and documents an HMAC-SHA256 signed webhook surface
+  with a full event-type reference.
+type: Index
+url: https://raw.githubusercontent.com/api-evangelist/magichour/refs/heads/main/apis.yml
+created: '2026-08-22'
+modified: '2026-08-22'
+specificationVersion: '0.23'
+tags:
+- AI
+- Media Generation
+- Video
+- Image
+- Audio
+- Generative AI
+- Webhooks
+tags_raw:
+- ai video
+- image generation
+- audio
+- generative ai
+apis:
+- aid: magichour:magichour-api
+  name: Magic Hour API
+  description: >-
+    AI generation of video, image and audio — headshots, clothes changer, face editor, GIF
+    generator, image editor and upscaler among 36 operations. Bearer auth, credit-priced.
+  humanURL: https://docs.magichour.ai
+  baseURL: https://api.magichour.ai
+  tags:
+  - AI
+  - Media Generation
+  - Video
+  properties:
+  - type: OpenAPI
+    url: openapi/magichour-api-openapi.yml
+  - type: Documentation
+    url: https://docs.magichour.ai
+  - type: APIReference
+    url: https://docs.magichour.ai/api-reference/openapi.json
+  - type: Authentication
+    url: https://docs.magichour.ai/get-started/authentication
+  - type: GettingStarted
+    url: https://docs.magichour.ai/get-started/quick-start
+  - type: Webhooks
+    url: https://docs.magichour.ai/integration/webhook/overview
+common:
+- type: LLMsTxt
+  url: llms/magichour-llms.txt
+- type: Website
+  url: https://magichour.ai
+- type: DeveloperPortal
+  url: https://docs.magichour.ai
+maintainers:
+- FN: Magic Hour
+  email: runbo@magichour.ai
+  url: https://magichour.ai
+x-provenance:
+  added: '2026-08-22'
+  method: searched
+  source: https://docs.magichour.ai/llms.txt
+  note: >-
+    Submitted via apis.io/add on 2026-08-22 from runbo@magichour.ai and auto-published by the gate
+    at rating 15. THE SUBMITTED APIs.json URL IS WRONG: https://docs.magichour.ai/apis.json returns
+    404, and an invented control path also 404s with a different body size, so the 404 is real
+    rather than a catch-all. A bad pointer in the submission, not an absent surface.
+    Everything here came from the provider's own llms.txt, which names the specification at
+    /api-reference/openapi.json. That was fetched (501KB, OpenAPI 3.0.2) and is kept pristine under
+    openapi/_original/. Note the spec declares zero component schemas despite 36 operations, so
+    request and response shapes are inline rather than reusable.
+    The API was probed: POST api.magichour.ai/v1/ai-headshot-generator returned 401 JSON, which is
+    correct gating on a live host.
+    Two DIFFERENT llms.txt files exist, one on magichour.ai and one on docs.magichour.ai. Both are
+    kept; the docs one is the richer and is what this profile was built from.

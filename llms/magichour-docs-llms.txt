@@ -1,0 +1,117 @@
+# Magic Hour API Docs
+
+> Easily generate videos, images, and audio using Magic Hour's API. Follow our documentation to seamlessly integrate AI content creation into your applications.
+
+## Docs
+
+- [Welcome to Magic Hour API](https://docs.magichour.ai/introduction.md): Magic Hour API documentation - generate videos, images, and audio using AI.
+- [Quick Start](https://docs.magichour.ai/get-started/quick-start.md): Generate an API key and make your first call in <3 minutes.
+- [Authentication](https://docs.magichour.ai/get-started/authentication.md): Create and manage API keys to authenticate your requests to the Magic Hour API.
+- [API Cookbook - Google Colab](https://docs.magichour.ai/get-started/cookbook.md): Try the Magic Hour APIs with ready-to-run sample code.
+- [Integration Overview](https://docs.magichour.ai/integration/overview.md): Understand how the Magic Hour API works and how to integrate it into your application.
+- [Creating Your First Integration](https://docs.magichour.ai/integration/first-integration.md): Build a complete Magic Hour integration from scratch in this hands-on tutorial.
+- [Adding API to Your App](https://docs.magichour.ai/integration/adding-api-to-your-app.md): Complete guide to integrating Magic Hour APIs into your production application.
+- [Handling Inputs and Outputs](https://docs.magichour.ai/integration/inputs-and-outputs.md): Complete guide to uploading input files and downloading generated results from Magic Hour API.
+- [Development and Testing](https://docs.magichour.ai/integration/development-and-testing.md): Best practices for developing and testing your Magic Hour API integration without consuming credits.
+- [Webhook Quickstart](https://docs.magichour.ai/integration/webhook/overview.md): Set up webhooks and test them end-to-end in under 10 minutes
+- [Create a Webhook](https://docs.magichour.ai/integration/webhook/create-webhook.md): Set up and test your first webhook end-to-end to receive real-time notifications from Magic Hour.
+- [Securing Your Webhook Handler](https://docs.magichour.ai/integration/webhook/secure-handler.md): Verify webhook authenticity with HMAC-SHA256 signature validation to prevent malicious requests.
+- [Production Webhook Handler](https://docs.magichour.ai/integration/webhook/create-handler.md): Deploy robust webhook handlers for production use
+- [Webhook Event Types](https://docs.magichour.ai/integration/webhook/event-types.md): Complete reference of all webhook events, payloads, and when they're triggered.
+- [MCP Server](https://docs.magichour.ai/integration/model-context-protocol.md): Access Magic Hour API docs through your favorite AI tools
+- [Pricing Overview](https://docs.magichour.ai/billing/overview.md): Choose the right pricing model for your needs - subscription or usage-based billing.
+- [Subscription Pricing](https://docs.magichour.ai/billing/subscription-pricing.md): Get credits upfront with predictable monthly or yearly billing and bonus credits for annual plans.
+- [Usage-Based Pricing](https://docs.magichour.ai/billing/usage-based-pricing.md): Pay only for what you use with automatic monthly billing and volume discounts.
+- [Resolution Limits](https://docs.magichour.ai/billing/resolution-limits.md): How plan tier and per-request resolution work across Magic Hour APIs.
+- [Video Tools](https://docs.magichour.ai/tools/video-tools.md): Explore video generation, editing, transformation, and enhancement APIs.
+- [AI Video Editor Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/video-editor.md): Edit existing videos with natural-language prompts.
+- [Animation Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/animation.md): Transform static images into dynamic animated videos with smooth motion.
+- [Audio to Video Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/audio-to-video.md): Generate a video from audio, an optional image, and a text prompt.
+- [Auto Subtitle Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/auto-subtitle-generator.md): Automatically generate and embed subtitles in videos with AI-powered transcription.
+- [Character Replace Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/character-replace.md): Replace a person in a video with a character from a reference image.
+- [Face Swap Video Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/face-swap-video.md): Replace faces in videos with frame-by-frame precision and temporal consistency.
+- [Image to Video Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/image-to-video.md): Convert static images into dynamic video content with AI-generated motion.
+- [Lip Sync Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/lip-sync.md): Synchronize lip movements in videos with new audio tracks.
+- [AI Talking Photo Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/talking-photo.md): Animate static photos to speak with realistic lip-sync and facial movements.
+- [Text to Video Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/text-to-video.md): Generate complete video content from text descriptions using AI.
+- [Video to Video Tool - Magic Hour Docs](https://docs.magichour.ai/tools/video/video-to-video.md): Transform existing videos by applying new styles, effects, and visual treatments.
+- [Image Tools](https://docs.magichour.ai/tools/image-tools.md): Explore image generation, editing, enhancement, and transformation APIs.
+- [Image Background Remover Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/background-remover.md): Automatically remove backgrounds from images with precision edge detection.
+- [Body Swap Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/body-swap.md): Place a person into a new scene with AI body replacement.
+- [AI Clothes Changer Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/clothes-changer.md): Virtually try on different clothing items with realistic results.
+- [AI Face Editor Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/face-editor.md): Edit and enhance facial features with AI-powered precision and natural results.
+- [Face Swap Photo Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/face-swap-photo.md): Replace faces in photos with realistic precision and natural blending.
+- [AI GIF Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/gif-generator.md): Create animated GIFs from images or text prompts with AI-powered generation.
+- [Head Swap Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/head-swap.md): Replace an entire head in a photo while retaining the body and scene.
+- [AI Headshot Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/headshot-generator.md): Generate professional-quality headshots from a single photo.
+- [AI Image Editor Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/image-editor.md): Edit and modify images with AI-powered tools for comprehensive image manipulation.
+- [AI Image Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/image-generator.md): Create high-quality images from text descriptions using AI.
+- [AI Image Upscaler Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/image-upscaler.md): Enhance image resolution and quality using AI-powered upscaling.
+- [AI Meme Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/meme-generator.md): Create AI-generated memes using popular templates and custom topics.
+- [Photo Colorizer Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/photo-colorizer.md): Colorize black and white photos with AI-powered realistic color restoration.
+- [AI QR Code Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/image/qr-code-generator.md): Create visually appealing, artistic QR codes that maintain functionality.
+- [Audio Tools](https://docs.magichour.ai/tools/audio-tools.md): Explore voice generation and voice cloning APIs.
+- [AI Voice Cloner Tool - Magic Hour Docs](https://docs.magichour.ai/tools/audio/voice-cloner.md): Clone any voice and generate realistic speech audio from text using custom voice samples.
+- [AI Voice Generator Tool - Magic Hour Docs](https://docs.magichour.ai/tools/audio/voice-generator.md): Generate realistic speech audio from text using celebrity and character voices.
+- [API Reference](https://docs.magichour.ai/api-reference/overview.md): Browse every Magic Hour API endpoint by media type.
+- [Models and Credit Costs](https://docs.magichour.ai/api-reference/models.md): Every model available through the API, what it supports, and what it costs in credits.
+- [Processing Times](https://docs.magichour.ai/api-reference/processing-times.md): Observed median end-to-end processing times for Magic Hour API endpoints.
+- [Generate Asset Upload Urls API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls.md): Generates a list of pre-signed upload URLs for the assets required. This API is only necessary if you want to upload to Magic Hour's storage. Refer to the [Input Files Guide](https://docs.magichour.ai/integration/inputs-and-outputs) for more details.
+- [Get Face Detection Details API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/files/get-face-detection-details.md): Get the details of a face detection task.
+- [Face Detection API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/files/face-detection.md): Detect faces in an image or video.         Use this API to get the list of faces detected in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo) or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swa…
+- [Get Video Details API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/get-video-details.md): Check the progress of a video project. The `downloads` field is populated after a successful render.    **Statuses** - `queued` — waiting to start - `rendering` — in progress - `complete` — ready; see `downloads` - `error` — a failure occurred (see `error`) - `canceled` — user canceled - `draft` — n…
+- [Delete Video API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/delete-video.md): Permanently delete the rendered video. This action is not reversible, please be sure before deleting.
+- [AI Talking Photo API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/ai-talking-photo.md): Create a talking photo from an image and audio or text input.
+- [AI Video Editor](https://docs.magichour.ai/api-reference/video-projects/ai-video-editor.md): **What this API does**
+- [Animation API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/animation.md): Create a Animation video. The estimated frame cost is calculated based on the `fps` and `end_seconds` input.
+- [Audio-to-Video](https://docs.magichour.ai/api-reference/video-projects/audio-to-video.md): **What this API does**
+- [Auto Subtitle Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/auto-subtitle-generator.md): Automatically generate subtitles for your video in multiple languages.
+- [Character Replace API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/character-replace.md): **What this API does**
+- [Face Swap Video API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/face-swap-video.md): **What this API does**
+- [Image-to-Video API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/image-to-video.md): **What this API does**
+- [Lip Sync API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/lip-sync.md): **What this API does**
+- [Text-to-Video API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/text-to-video.md): **What this API does**
+- [Video-to-Video API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/video-projects/video-to-video.md): **What this API does**
+- [Get Image Details API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/get-image-details.md): Check the progress of a image project. The `downloads` field is populated after a successful render.    **Statuses** - `queued` — waiting to start - `rendering` — in progress - `complete` — ready; see `downloads` - `error` — a failure occurred (see `error`) - `canceled` — user canceled - `draft` — n…
+- [Delete Image API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/delete-image.md): Permanently delete the rendered image(s). This action is not reversible, please be sure before deleting.
+- [AI Clothes Changer API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-clothes-changer.md): Change outfits in photos in seconds with just a photo reference. Each photo costs 25 credits.
+- [AI Face Editor API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-face-editor.md): Edit facial features of an image using AI. Each edit costs 1 frame. The height/width of the output image depends on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page for more details
+- [AI GIF Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-gif-generator.md): Create an AI GIF. Each GIF costs 50 credits.
+- [AI Image Editor API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-image-editor.md): Edit images with AI.
+- [AI Headshot Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-headshot-generator.md): Create an AI headshot. Each headshot costs 50 credits.
+- [AI Image Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-image-generator.md): Create an AI image with advanced model selection and quality controls.
+- [AI Image Upscaler API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-image-upscaler.md): Upscale your image using AI. Each 2x upscale costs 50 credits for balanced/creative modes, and 25 credits for preserve. 4x upscale costs 200 and 100 credits respectively.
+- [AI Meme Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-meme-generator.md): Create an AI generated meme. Each meme costs 10 credits.
+- [AI QR Code Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/ai-qr-code-generator.md): Create an AI QR code. Each QR code costs 0 credits.
+- [Body Swap](https://docs.magichour.ai/api-reference/image-projects/body-swap.md): Swap a person into a scene image using Nano Banana 2 Lite (640px/1k) or Nano Banana 2 (2k/4k). Credits depend on `resolution` (from 50 credits at 640px upward).
+- [Face Swap Photo API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo.md): Create a face swap photo. Each photo costs 10 credits. The height/width of the output image depends on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page for more details
+- [Head Swap API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/head-swap.md): Swap a head onto a body image. Each image costs 10 credits. Output resolution depends on your subscription; you may set `max_resolution` lower than your plan maximum if desired.
+- [Image Background Remover API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/image-background-remover.md): Remove background from image. Each image costs 5 credits.
+- [Photo Colorizer API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/image-projects/photo-colorizer.md): Colorize image. Each image costs 10 credits.
+- [Get Audio Details API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/audio-projects/get-audio-details.md): Check the progress of a audio project. The `downloads` field is populated after a successful render.    **Statuses** - `queued` — waiting to start - `rendering` — in progress - `complete` — ready; see `downloads` - `error` — a failure occurred (see `error`) - `canceled` — user canceled - `draft` — n…
+- [Delete Audio API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/audio-projects/delete-audio.md): Permanently delete the rendered audio file(s). This action is not reversible, please be sure before deleting.
+- [AI Voice Generator API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/audio-projects/ai-voice-generator.md): Generate speech from text. Each character costs 0.1 credits. The cost is rounded up to the nearest whole number.
+- [AI Voice Cloner API Reference - Magic Hour Docs](https://docs.magichour.ai/api-reference/audio-projects/ai-voice-cloner.md): Clone a voice from an audio sample and generate speech.  * Each character costs 0.1 credits.  * The cost is rounded up to the nearest whole number
+- [Webhook Reference](https://docs.magichour.ai/webhook-reference/overview.md): Browse every Magic Hour webhook event by project type and status.
+- [Video Started](https://docs.magichour.ai/webhook-reference/video-events/video-started.md): Magic Hour notifies your server when a video project begins processing. Reference signed headers, JSON payload fields, and example body for your webhook handler.
+- [Video Completed](https://docs.magichour.ai/webhook-reference/video-events/video-completed.md): Magic Hour notifies your server when a video project finishes successfully. Payload includes download URLs, dimensions, credits charged, and fields to verify with the Get Video Details API.
+- [Video Errored](https://docs.magichour.ai/webhook-reference/video-events/video-errored.md): Magic Hour notifies your server when a video project fails. Webhook reference for error code, message, project id, and HMAC-signed headers your endpoint should validate.
+- [Image Started](https://docs.magichour.ai/webhook-reference/image-events/image-started.md): Magic Hour notifies your server when an image project begins processing. Document signature headers, JSON schema, and example payload for image-generation webhooks.
+- [Image Completed](https://docs.magichour.ai/webhook-reference/image-events/image-completed.md): Magic Hour notifies your server when an image project completes. Reference download arrays, credits, image count, project type, and verified request shape for integrations.
+- [Image Errored](https://docs.magichour.ai/webhook-reference/image-events/image-errored.md): Magic Hour notifies your server when an image project fails. Use this page for error payload fields, project metadata, and validating signed webhook requests from Magic Hour.
+- [Audio Started](https://docs.magichour.ai/webhook-reference/audio-events/audio-started.md): Magic Hour notifies your server when an audio project begins processing. Webhook reference for timestamp and signature headers plus JSON body for voice and audio jobs.
+- [Audio Completed](https://docs.magichour.ai/webhook-reference/audio-events/audio-completed.md): Magic Hour notifies your server when an audio generation completes successfully. Payload covers downloads, credits, duration, and how to verify the incoming signed request.
+- [Audio Errored](https://docs.magichour.ai/webhook-reference/audio-events/audio-errored.md): Magic Hour notifies your server when an audio project fails. Error-focused webhook reference with request headers, body fields, and examples for your failure-handling logic.
+- [2026](https://docs.magichour.ai/changelog.md): Latest feature enhancements in Magic Hour
+- [2025](https://docs.magichour.ai/changelog/2025.md): Latest feature enhancements in Magic Hour
+- [2024](https://docs.magichour.ai/changelog/2024.md): List of feature releases in 2024
+- [2023](https://docs.magichour.ai/changelog/2023.md): List of feature releases in 2023
+
+## OpenAPI Specs
+
+- [openapi](https://docs.magichour.ai/api-reference/openapi.json)
+
+## Optional
+
+- [Community](https://discord.com/invite/JX5rgsZaJp)
+- [Status](https://status.magichour.ai)
