@@ -28,20 +28,76 @@ tags_raw:
 - audio
 - generative ai
 apis:
-- aid: magichour:magichour-api
-  name: Magic Hour API
-  description: >-
-    AI generation of video, image and audio — headshots, clothes changer, face editor, GIF
-    generator, image editor and upscaler among 36 operations. Bearer auth, credit-priced.
+- aid: magichour:magichour-audio-projects-api
+  name: Magic Hour Audio Projects API
+  description: API related to audio projects
   humanURL: https://docs.magichour.ai
   baseURL: https://api.magichour.ai
   tags:
-  - AI
-  - Media Generation
-  - Video
+  - Audio Projects
   properties:
   - type: OpenAPI
-    url: openapi/magichour-api-openapi.yml
+    url: openapi/magichour-audio-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.magichour.ai
+  - type: APIReference
+    url: https://docs.magichour.ai/api-reference/openapi.json
+  - type: Authentication
+    url: https://docs.magichour.ai/get-started/authentication
+  - type: GettingStarted
+    url: https://docs.magichour.ai/get-started/quick-start
+  - type: Webhooks
+    url: https://docs.magichour.ai/integration/webhook/overview
+- aid: magichour:magichour-files-api
+  name: Magic Hour Files API
+  description: API related to uploading assets used for video generation
+  humanURL: https://docs.magichour.ai
+  baseURL: https://api.magichour.ai
+  tags:
+  - Files
+  properties:
+  - type: OpenAPI
+    url: openapi/magichour-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.magichour.ai
+  - type: APIReference
+    url: https://docs.magichour.ai/api-reference/openapi.json
+  - type: Authentication
+    url: https://docs.magichour.ai/get-started/authentication
+  - type: GettingStarted
+    url: https://docs.magichour.ai/get-started/quick-start
+  - type: Webhooks
+    url: https://docs.magichour.ai/integration/webhook/overview
+- aid: magichour:magichour-image-projects-api
+  name: Magic Hour Image Projects API
+  description: API related to image projects
+  humanURL: https://docs.magichour.ai
+  baseURL: https://api.magichour.ai
+  tags:
+  - Image Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/magichour-image-projects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.magichour.ai
+  - type: APIReference
+    url: https://docs.magichour.ai/api-reference/openapi.json
+  - type: Authentication
+    url: https://docs.magichour.ai/get-started/authentication
+  - type: GettingStarted
+    url: https://docs.magichour.ai/get-started/quick-start
+  - type: Webhooks
+    url: https://docs.magichour.ai/integration/webhook/overview
+- aid: magichour:magichour-video-projects-api
+  name: Magic Hour Video Projects API
+  description: API related to video projects
+  humanURL: https://docs.magichour.ai
+  baseURL: https://api.magichour.ai
+  tags:
+  - Video Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/magichour-video-projects-api-openapi.yml
   - type: Documentation
     url: https://docs.magichour.ai
   - type: APIReference
