@@ -26,13 +26,10 @@ created: '2026-08-22'
 modified: '2026-08-22'
 specificationVersion: '0.23'
 tags:
-- AI
-- Media Generation
-- Video
-- Image
+- ai video
+- image generation
 - Audio
-- Generative AI
-- Webhooks
+- generative ai
 tags_raw:
 - ai video
 - image generation
@@ -65,6 +62,8 @@ apis:
   humanURL: https://docs.magichour.ai
   baseURL: https://api.magichour.ai
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
