@@ -1,0 +1,1143 @@
+openapi: 3.2.0
+info:
+  title: Magic Hour Audio Projects API
+  version: beta
+  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  termsOfService: https://magichour.ai/terms-of-service
+servers:
+- url: https://api.magichour.ai
+tags:
+- name: Audio Projects
+  description: API related to audio projects
+paths:
+  /v1/audio-projects/{id}:
+    get:
+      description: "Check the progress of a audio project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n- `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n- `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+      summary: Get audio details
+      tags:
+      - Audio Projects
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: cuid-example
+        description: Unique ID of the audio project. This value is returned by all of the POST APIs that create an audio.
+      operationId: audioProjects.getDetails
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cuid-example
+                    description: Unique ID of the audio. Use it with the [Get audio Project API](https://docs.magichour.ai/api-reference/audio-projects/get-audio-details) to fetch status and downloads.
+                  name:
+                    type:
+                    - string
+                    - 'null'
+                    description: The name of the audio.
+                    example: Example Name
+                  status:
+                    type: string
+                    enum:
+                    - draft
+                    - queued
+                    - rendering
+                    - complete
+                    - error
+                    - canceled
+                    description: 'The status of the audio.
+
+
+                      - `draft` - the project was created but has not been submitted for rendering
+
+                      - `queued` - the job is waiting for an available server
+
+                      - `rendering` - the job is being processed; the `audio.started` webhook event fires when rendering begins
+
+                      - `complete` - the job finished successfully; fires `audio.completed`
+
+                      - `error` - the job failed during processing; fires `audio.errored`
+
+                      - `canceled` - the job was manually canceled (for example from the Magic Hour web app)
+
+
+                      **Note:** `rendering`, `complete`, and `error` have matching webhook events; `canceled` does not - a canceled job emits no webhook event, so poll this endpoint to detect cancellation.'
+                    example: complete
+                  type:
+                    type: string
+                    description: The type of the audio project. Possible values are VOICE_GENERATOR, VOICE_CHANGER, VOICE_CLONER, VIDEO_TO_AUDIO, MUSIC_GENERATOR
+                    example: VOICE_GENERATOR
+                  created_at:
+                    type: string
+                    format: date-time
+                  enabled:
+                    type: boolean
+                    description: Whether this resource is active. If false, it is deleted.
+                  credits_charged:
+                    type: integer
+                    example: 2
+                    description: "The amount of credits deducted from your account to generate the audio. We charge credits right when the request is made. \n\nIf an error occurred while generating the audio, credits will be refunded and this field will be updated to include the refund."
+                  downloads:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          format: uri
+                          example: https://videos.magichour.ai/id/output.wav
+                        expires_at:
+                          type: string
+                          format: date-time
+                          example: '2024-10-19T05:16:19.027Z'
+                      required:
+                      - url
+                      - expires_at
+                      description: The download url and expiration date of the audio project
+                  error:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      message:
+                        type: string
+                        description: Details on the reason why a failure happened.
+                        example: Please use an image with a detectable face
+                      code:
+                        type: string
+                        example: no_source_face
+                        description: An error code to indicate why a failure happened.
+                    required:
+                    - message
+                    - code
+                    description: In the case of an error, this object will contain the error encountered during video render
+                    example: null
+                required:
+                - id
+                - name
+                - status
+                - type
+                - created_at
+                - enabled
+                - credits_charged
+                - downloads
+                - error
+                description: Success
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: 'from magic_hour import Client
+
+          from os import getenv
+
+
+          client = Client(token=getenv("API_TOKEN"))
+
+          res = client.v1.audio_projects.get(id="cuid-example")'
+      - lang: javascript
+        source: 'import { Client } from "magic-hour";
+
+
+          const client = new Client({ token: process.env["API_TOKEN"]!! });
+
+          const res = await client.v1.audioProjects.get({ id: "cuid-example" });'
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\taudio_projects \"github.com/magichourhq/magic-hour-go/resources/v1/audio_projects\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.AudioProjects.Get(audio_projects.GetRequest{\n\t\tId: \"cuid-example\",\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .audio_projects()\n    .get(magic_hour::resources::v1::audio_projects::GetRequest {\n        id: \"cuid-example\".to_string(),\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request GET \\\n     --url https://api.magichour.ai/v1/audio-projects/id \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/audio-projects/id\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"GET\",\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.get(\"https://api.magichour.ai/v1/audio-projects/id\")\n  .header(\"accept\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .asString();"
+    delete:
+      description: Permanently delete the rendered audio file(s). This action is not reversible, please be sure before deleting.
+      summary: Delete audio
+      tags:
+      - Audio Projects
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: cuid-example
+        description: Unique ID of the audio project. This value is returned by all of the POST APIs that create an audio.
+      operationId: audioProjects.delete
+      responses:
+        '204':
+          description: '204'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: 'from magic_hour import Client
+
+          from os import getenv
+
+
+          client = Client(token=getenv("API_TOKEN"))
+
+          res = client.v1.audio_projects.delete(id="cuid-example")'
+      - lang: javascript
+        source: 'import { Client } from "magic-hour";
+
+
+          const client = new Client({ token: process.env["API_TOKEN"]!! });
+
+          const res = await client.v1.audioProjects.delete({ id: "cuid-example" });'
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\taudio_projects \"github.com/magichourhq/magic-hour-go/resources/v1/audio_projects\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\terr := client.V1.AudioProjects.Delete(audio_projects.DeleteRequest{\n\t\tId: \"cuid-example\",\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .audio_projects()\n    .delete(magic_hour::resources::v1::audio_projects::DeleteRequest {\n        id: \"cuid-example\".to_string(),\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request DELETE \\\n     --url https://api.magichour.ai/v1/audio-projects/id \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/audio-projects/id\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"DELETE\",\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.delete(\"https://api.magichour.ai/v1/audio-projects/id\")\n  .header(\"accept\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .asString();"
+  /v1/ai-voice-generator:
+    post:
+      description: Generate speech from text. Each character costs 0.1 credits. The cost is rounded up to the nearest whole number.
+      summary: AI Voice Generator
+      tags:
+      - Audio Projects
+      parameters: []
+      operationId: aiVoiceGenerator.createAudio
+      requestBody:
+        required: true
+        description: Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Give your audio a custom name for easy identification.
+                  example: My Voice Generator audio
+                  default: Voice Generator - dateTime
+                style:
+                  type: object
+                  properties:
+                    prompt:
+                      type: string
+                      minLength: 1
+                      description: Text used to generate speech. The character limit is 1000 characters.
+                      example: Hello, how are you?
+                    voice_name:
+                      type: string
+                      enum:
+                      - Elon Musk
+                      - Mark Zuckerberg
+                      - Joe Rogan
+                      - Barack Obama
+                      - Morgan Freeman
+                      - Kanye West
+                      - Donald Trump
+                      - Joe Biden
+                      - Kim Kardashian
+                      - Taylor Swift
+                      - James Earl Jones
+                      - Samuel L. Jackson
+                      - Jeff Goldblum
+                      - David Attenborough
+                      - Sean Connery
+                      - Cillian Murphy
+                      - Anne Hathaway
+                      - Julia Roberts
+                      - Natalie Portman
+                      - Steve Carell
+                      - Amy Poehler
+                      - Stephen Colbert
+                      - Jimmy Fallon
+                      - David Letterman
+                      - Alex Trebek
+                      - Katy Perry
+                      - Prince
+                      - Kevin Bacon
+                      - Tom Hiddleston
+                      - Adam Driver
+                      - Alan Rickman
+                      - Alexz Johnson
+                      - Ana Gasteyer
+                      - Andrew Rannells
+                      - Arden Cho
+                      - Bear Grylls
+                      - Ben McKenzie
+                      - Ben Stiller
+                      - Ben Whishaw
+                      - Billie Joe Armstrong
+                      - Bingbing Li
+                      - Booboo Stewart
+                      - Bradley Steven Perry
+                      - Bruno Mars
+                      - Caity Lotz
+                      - Cameron Boyce
+                      - Candice Accola
+                      - Carrie Underwood
+                      - Casey Affleck
+                      - Caterina Scorsone
+                      - Cedric the Entertainer
+                      - Chace Crawford
+                      - Chadwick Boseman
+                      - Charlie Day
+                      - Chris Hemsworth
+                      - Chris Martin
+                      - Christopher Mintz-Plasse
+                      - Dan Fogler
+                      - Dan Stevens
+                      - Daniel Dae Kim
+                      - Danielle Panabaker
+                      - Dave Bautista
+                      - David Schwimmer
+                      - Denis Leary
+                      - Derek Mears
+                      - Diego Luna
+                      - Donald Glover
+                      - Donnie Yen
+                      - Doutzen Kroes
+                      - Dove Cameron
+                      - Dr. Dre
+                      - Drake Bell
+                      - Elle Fanning
+                      - Ernie Hudson
+                      - Fergie
+                      - Forest Whitaker
+                      - Francia Raisa
+                      - Freddie Highmore
+                      - Gillian Jacobs
+                      - Gina Carano
+                      - Ginnifer Goodwin
+                      - Gordon Ramsay
+                      - Guy Pearce
+                      - Gwendoline Christie
+                      - Hailee Steinfeld
+                      - Howie Mandel
+                      - Hugh Jackman
+                      - Hugh Laurie
+                      - J. K. Simmons
+                      - Jack Black
+                      - Jared Leto
+                      - Jennifer Carpenter
+                      - Kesha
+                      - Kris Jenner
+                      - Kristen Bell
+                      - Lorde
+                      - Matt Smith
+                      - Marilyn Monroe
+                      - Charlie Chaplin
+                      - Albert Einstein
+                      - Abraham Lincoln
+                      - John F. Kennedy
+                      - Lucille Ball
+                      - A.R. Rahman
+                      - Aamir Khan
+                      - Ajay Devgn
+                      - Akshay Kumar
+                      - Alain Delon
+                      - Alan Alda
+                      - Alan Cumming
+                      - Amitabh Bachchan
+                      - Ang Lee
+                      - Ansel Elgort
+                      - Anthony Anderson
+                      - Anthony Mackie
+                      - Armie Hammer
+                      - Asa Butterfield
+                      - B.J. Novak
+                      - Barbara Eden
+                      - Betty White
+                      - Bill Nighy
+                      - Bill Pullman
+                      - Blake Shelton
+                      - Bonnie Wright
+                      - Brad Paisley
+                      - Brendan Gleeson
+                      - Brian Cox
+                      - Bruno Ganz
+                      - Burt Reynolds
+                      - Carrie Fisher
+                      - Charles Dance
+                      - Chiwetel Ejiofor
+                      - Chris Pine
+                      - Christina Hendricks
+                      - Christina Ricci
+                      - Cyndi Lauper
+                      - Dakota Fanning
+                      - Damian Lewis
+                      - Dan Aykroyd
+                      - Daniel Craig
+                      - David Oyelowo
+                      - David Tennant
+                      - Diane Keaton
+                      - Diane Kruger
+                      - Dick Van Dyke
+                      - Domhnall Gleeson
+                      - Dominic Cooper
+                      - Donald Sutherland
+                      - Drew Carey
+                      - Eartha Kitt
+                      - Eddie Izzard
+                      - Edward Asner
+                      - Eli Roth
+                      - Elisabeth Moss
+                      - Ellen Burstyn
+                      - Emile Hirsch
+                      - Ezra Miller
+                      - Felicity Jones
+                      - Fiona Shaw
+                      - Florence Henderson
+                      - Freida Pinto
+                      - Geena Davis
+                      - Gemma Arterton
+                      - Geri Halliwell
+                      - Glenn Close
+                      - Gloria Steinem
+                      - Greta Gerwig
+                      - Gugu Mbatha-Raw
+                      - Hans Zimmer
+                      - Harry Connick Jr.
+                      - Harvey Keitel
+                      - Helena Bonham Carter
+                      - Henry Cavill
+                      - Hilary Swank
+                      - Hugh Bonneville
+                      - Idina Menzel
+                      - Imelda Staunton
+                      - Ingrid Bergman
+                      - Irrfan Khan
+                      - Isla Fisher
+                      - Iwan Rheon
+                      - Jack Lemmon
+                      - Janet Jackson
+                      - Jason Bateman
+                      - Jason Segel
+                      - Jennifer Coolidge
+                      - Johnny Galecki
+                      - Jon Favreau
+                      - Joseph Gordon-Levitt
+                      - Josh Brolin
+                      - Josh Gad
+                      - Josh Groban
+                      - Julia Louis-Dreyfus
+                      - Kristen Stewart
+                      - Kristen Wiig
+                      - Rooney Mara
+                      - Caitriona Balfe
+                      - J.J. Abrams
+                      - Zoe Saldana
+                      - SpongeBob SquarePants
+                      - Patrick Star
+                      - Squidward Tentacles
+                      - Homer Simpson
+                      - Bart Simpson
+                      - Peter Griffin
+                      - Stewie Griffin
+                      - Eric Cartman
+                      - Rick Sanchez
+                      - Bugs Bunny
+                      - Mickey Mouse
+                      - Donald Duck
+                      - Shrek
+                      - Donkey (Shrek)
+                      - Elsa (Frozen)
+                      - Woody (Toy Story)
+                      - Buzz Lightyear
+                      - Scooby-Doo
+                      - Shaggy Rogers
+                      - Bender (Futurama)
+                      - Optimus Prime
+                      - Batman (Animated)
+                      - The Joker (Animated)
+                      - Darth Vader
+                      - Yoda
+                      - Gollum Smeagol
+                      - Gandalf
+                      - Winnie the Pooh
+                      - Kermit the Frog
+                      - Elmo
+                      - SpiderMan (Tom Holland ver.)
+                      - Mario
+                      - Luigi
+                      - Sonic the Hedgehog
+                      - Naruto Uzumaki
+                      - Goku
+                      - Vegeta
+                      - Light Yagami
+                      - Luffy (One Piece)
+                      - Edward Elric
+                      - Eren Jaeger
+                      - Levi Ackerman
+                      - Tanjiro Kamado
+                      - All Might
+                      - GLaDOS
+                      - Master Chief
+                      - Kratos
+                      - Arthur Morgan
+                      - Geralt of Rivia
+                      - Dwayne 'The Rock' Johnson
+                      - LeBron James
+                      - Shaquille O'Neal
+                      - Conor McGregor
+                      - Mike Tyson
+                      - Kobe Bryant
+                      - Floyd Mayweather
+                      - Cristiano Ronaldo
+                      - Lionel Messi
+                      - Serena Williams
+                      - Tom Brady
+                      - Stephen Curry
+                      - John Cena
+                      - Hulk Hogan
+                      - Stone Cold Steve Austin
+                      - The Undertaker
+                      - Nate Diaz
+                      - Charles Barkley
+                      - Shannon Sharpe
+                      - Drake
+                      - Rihanna
+                      - Eminem
+                      - Snoop Dogg
+                      - Jay-Z
+                      - Ed Sheeran
+                      - Billie Eilish
+                      - Ariana Grande
+                      - Adele
+                      - Post Malone
+                      - Travis Scott
+                      - Nicki Minaj
+                      - Cardi B
+                      - Doja Cat
+                      - Bad Bunny
+                      - Justin Bieber
+                      - Sabrina Carpenter
+                      - Chappell Roan
+                      - Dua Lipa
+                      - The Weeknd
+                      - Miley Cyrus
+                      - Lady Gaga
+                      - Kendrick Lamar
+                      - Ozzy Osbourne
+                      - Freddie Mercury
+                      - Elvis Presley
+                      - Bob Marley
+                      - Frank Sinatra
+                      - MrBeast
+                      - PewDiePie
+                      - Kai Cenat
+                      - IShowSpeed
+                      - Markiplier
+                      - Jacksepticeye
+                      - KSI
+                      - Logan Paul
+                      - Jake Paul
+                      - Dream (Minecraft)
+                      - Corpse Husband
+                      - xQc
+                      - Pokimane
+                      - Valkyrae
+                      - Ninja
+                      - Joe Scott
+                      - Linus (LTT)
+                      - Ryan Reynolds
+                      - Tom Hanks
+                      - Robert Downey Jr.
+                      - Will Smith
+                      - Denzel Washington
+                      - Leonardo DiCaprio
+                      - Brad Pitt
+                      - Keanu Reeves
+                      - Nicolas Cage
+                      - Al Pacino
+                      - Robert De Niro
+                      - Arnold Schwarzenegger
+                      - Sylvester Stallone
+                      - Vin Diesel
+                      - Jason Statham
+                      - Tom Cruise
+                      - Johnny Depp
+                      - Scarlett Johansson
+                      - Angelina Jolie
+                      - Jennifer Aniston
+                      - Emma Watson
+                      - Margot Robbie
+                      - Sydney Sweeney
+                      - Zendaya
+                      - Timothee Chalamet
+                      - Pedro Pascal
+                      - Oscar Isaac
+                      - Benedict Cumberbatch
+                      - Ian McKellen
+                      - Patrick Stewart
+                      - Christopher Walken
+                      - Matthew McConaughey
+                      - Harrison Ford
+                      - Mark Wahlberg
+                      - Owen Wilson
+                      - Seth Rogen
+                      - Kevin Hart
+                      - Adam Sandler
+                      - Jim Carrey
+                      - Eddie Murphy
+                      - Robin Williams
+                      - Will Ferrell
+                      - Melissa McCarthy
+                      - Awkwafina
+                      - Jason Momoa
+                      - Idris Elba
+                      - Tom Hardy
+                      - Michael B. Jordan
+                      - Austin Butler
+                      - Glen Powell
+                      - Paul Giamatti
+                      - Bryan Cranston
+                      - Bob Odenkirk
+                      - Vladimir Putin
+                      - Queen Elizabeth II
+                      - Winston Churchill
+                      - Martin Luther King Jr.
+                      - Kamala Harris
+                      - Bernie Sanders
+                      - Alexandria Ocasio-Cortez
+                      - Narendra Modi
+                      - Oprah Winfrey
+                      - Ellen DeGeneres
+                      - Dr. Phil
+                      - Steve Harvey
+                      - Trevor Noah
+                      - John Oliver
+                      - James Corden
+                      - Ryan Seacrest
+                      - Howard Stern
+                      - Conan O'Brien
+                      - Seth Meyers
+                      - Bill Nye
+                      - Neil deGrasse Tyson
+                      - Guy Fieri
+                      - Dave Chappelle
+                      - Chris Rock
+                      - Jerry Seinfeld
+                      - Ali Wong
+                      - John Mulaney
+                      - Hasan Minhaj
+                      - Nikki Glaser
+                      - Matt Rife
+                      - Gabriel Iglesias
+                      - Bo Burnham
+                      - Jeff Bezos
+                      - Bill Gates
+                      - Steve Jobs
+                      - Tim Cook
+                      - Sam Altman
+                      - Jensen Huang
+                      - Gilbert Gottfried
+                      - James May
+                      - Jeremy Clarkson
+                      - Richard Hammond
+                      - Bob Ross
+                      - Anthony Bourdain
+                      - David Goggins
+                      - Jordan Peterson
+                      - Joe Pesci
+                      - Danny DeVito
+                      - Seth MacFarlane
+                      - Patrick Warburton
+                      - Keith David
+                      - Mark Hamill
+                      - Liam Neeson
+                      - Antonio Banderas
+                      - Sofia Vergara
+                      - Penelope Cruz
+                      - Gal Gadot
+                      - Cate Blanchett
+                      - Viola Davis
+                      - Meryl Streep
+                      - Sandra Bullock
+                      - Reese Witherspoon
+                      - Salma Hayek
+                      - Lupita Nyong'o
+                      - Florence Pugh
+                      - Jenna Ortega
+                      - Ana de Armas
+                      - Jacob Elordi
+                      - Barry White
+                      - Dolly Parton
+                      - Willie Nelson
+                      - Lil Wayne
+                      - 50 Cent
+                      - Ice Cube
+                      - Tupac Shakur
+                      - Notorious B.I.G.
+                      - Bob Dylan
+                      - David Bowie
+                      - Michael Jackson
+                      - Whitney Houston
+                      - Amy Winehouse
+                      - SZA
+                      - Tyler, The Creator
+                      - Thanos
+                      - Tony Stark
+                      - Captain Jack Sparrow
+                      - Walter White
+                      - Tommy Shelby
+                      - Michael Scott
+                      - Dwight Schrute
+                      - Bowser
+                      - Usain Bolt
+                      - Tyson Fury
+                      - Dana White
+                      - Pat McAfee
+                      - Giannis Antetokounmpo
+                      - Lex Fridman
+                      - Ben Shapiro
+                      - Tucker Carlson
+                      - Martha Stewart
+                      - Gordon Lightfoot
+                      - Lizzo
+                      - Megan Thee Stallion
+                      - Ice Spice
+                      - 21 Savage
+                      - Metro Boomin
+                      - Jack Harlow
+                      - Peso Pluma
+                      - BTS Jungkook
+                      - Quentin Tarantino
+                      - Werner Herzog
+                      - Anderson Cooper
+                      - Rachel Maddow
+                      - Mahatma Gandhi
+                      - Muhammad Ali
+                      - Princess Diana
+                      - Nelson Mandela
+                      - Steve Irwin
+                      - Morty Smith
+                      - Andrew Huberman
+                      - Willem Dafoe
+                      - Mike Rowe
+                      - Terminator
+                      - Deadpool
+                      - Plankton
+                      - Mr. Krabs
+                      - Picard
+                      description: 'The voice to use for the speech. Available voices: Elon Musk, Mark Zuckerberg, Joe Rogan, Barack Obama, Morgan Freeman, Kanye West, Donald Trump, Joe Biden, Kim Kardashian, Taylor Swift, James Earl Jones, Samuel L. Jackson, Jeff Goldblum, David Attenborough, Sean Connery, Cillian Murphy, Anne Hathaway, Julia Roberts, Natalie Portman, Steve Carell, Amy Poehler, Stephen Colbert, Jimmy Fallon, David Letterman, Alex Trebek, Katy Perry, Prince, Kevin Bacon, Tom Hiddleston, Adam Driver, Alan Rickman, Alexz Johnson, Ana Gasteyer, Andrew Rannells, Arden Cho, Bear Grylls, Ben McKenzie, Ben Stiller, Ben Whishaw, Billie Joe Armstrong, Bingbing Li, Booboo Stewart, Bradley Steven Perry, Bruno Mars, Caity Lotz, Cameron Boyce, Candice Accola, Carrie Underwood, Casey Affleck, Caterina Scorsone, Cedric the Entertainer, Chace Crawford, Chadwick Boseman, Charlie Day, Chris Hemsworth, Chris Martin, Christopher Mintz-Plasse, Dan Fogler, Dan Stevens, Daniel Dae Kim, Danielle Panabaker, Dave Bautista, David Schwimmer, Denis Leary, Derek Mears, Diego Luna, Donald Glover, Donnie Yen, Doutzen Kroes, Dove Cameron, Dr. Dre, Drake Bell, Elle Fanning, Ernie Hudson, Fergie, Forest Whitaker, Francia Raisa, Freddie Highmore, Gillian Jacobs, Gina Carano, Ginnifer Goodwin, Gordon Ramsay, Guy Pearce, Gwendoline Christie, Hailee Steinfeld, Howie Mandel, Hugh Jackman, Hugh Laurie, J. K. Simmons, Jack Black, Jared Leto, Jennifer Carpenter, Kesha, Kris Jenner, Kristen Bell, Lorde, Matt Smith, Marilyn Monroe, Charlie Chaplin, Albert Einstein, Abraham Lincoln, John F. Kennedy, Lucille Ball, A.R. Rahman, Aamir Khan, Ajay Devgn, Akshay Kumar, Alain Delon, Alan Alda, Alan Cumming, Amitabh Bachchan, Ang Lee, Ansel Elgort, Anthony Anderson, Anthony Mackie, Armie Hammer, Asa Butterfield, B.J. Novak, Barbara Eden, Betty White, Bill Nighy, Bill Pullman, Blake Shelton, Bonnie Wright, Brad Paisley, Brendan Gleeson, Brian Cox, Bruno Ganz, Burt Reynolds, Carrie Fisher, Charles Dance, Chiwetel Ejiofor, Chris Pine, Christina Hendricks, Christina Ricci, Cyndi Lauper, Dakota Fanning, Damian Lewis, Dan Aykroyd, Daniel Craig, David Oyelowo, David Tennant, Diane Keaton, Diane Kruger, Dick Van Dyke, Domhnall Gleeson, Dominic Cooper, Donald Sutherland, Drew Carey, Eartha Kitt, Eddie Izzard, Edward Asner, Eli Roth, Elisabeth Moss, Ellen Burstyn, Emile Hirsch, Ezra Miller, Felicity Jones, Fiona Shaw, Florence Henderson, Freida Pinto, Geena Davis, Gemma Arterton, Geri Halliwell, Glenn Close, Gloria Steinem, Greta Gerwig, Gugu Mbatha-Raw, Hans Zimmer, Harry Connick Jr., Harvey Keitel, Helena Bonham Carter, Henry Cavill, Hilary Swank, Hugh Bonneville, Idina Menzel, Imelda Staunton, Ingrid Bergman, Irrfan Khan, Isla Fisher, Iwan Rheon, Jack Lemmon, Janet Jackson, Jason Bateman, Jason Segel, Jennifer Coolidge, Johnny Galecki, Jon Favreau, Joseph Gordon-Levitt, Josh Brolin, Josh Gad, Josh Groban, Julia Louis-Dreyfus, Kristen Stewart, Kristen Wiig, Rooney Mara, Caitriona Balfe, J.J. Abrams, Zoe Saldana, SpongeBob SquarePants, Patrick Star, Squidward Tentacles, Homer Simpson, Bart Simpson, Peter Griffin, Stewie Griffin, Eric Cartman, Rick Sanchez, Bugs Bunny, Mickey Mouse, Donald Duck, Shrek, Donkey (Shrek), Elsa (Frozen), Woody (Toy Story), Buzz Lightyear, Scooby-Doo, Shaggy Rogers, Bender (Futurama), Optimus Prime, Batman (Animated), The Joker (Animated), Darth Vader, Yoda, Gollum Smeagol, Gandalf, Winnie the Pooh, Kermit the Frog, Elmo, SpiderMan (Tom Holland ver.), Mario, Luigi, Sonic the Hedgehog, Naruto Uzumaki, Goku, Vegeta, Light Yagami, Luffy (One Piece), Edward Elric, Eren Jaeger, Levi Ackerman, Tanjiro Kamado, All Might, GLaDOS, Master Chief, Kratos, Arthur Morgan, Geralt of Rivia, Dwayne ''The Rock'' Johnson, LeBron James, Shaquille O''Neal, Conor McGregor, Mike Tyson, Kobe Bryant, Floyd Mayweather, Cristiano Ronaldo, Lionel Messi, Serena Williams, Tom Brady, Stephen Curry, John Cena, Hulk Hogan, Stone Cold Steve Austin, The Undertaker, Nate Diaz, Charles Barkley, Shannon Sharpe, Drake, Rihanna, Eminem, Snoop Dogg, Jay-Z, Ed Sheeran, Billie Eilish, Ariana Grande, Adele, Post Malone, Travis Scott, Nicki Minaj, Cardi B, Doja Cat, Bad Bunny, Justin Bieber, Sabrina Carpenter, Chappell Roan, Dua Lipa, The Weeknd, Miley Cyrus, Lady Gaga, Kendrick Lamar, Ozzy Osbourne, Freddie Mercury, Elvis Presley, Bob Marley, Frank Sinatra, MrBeast, PewDiePie, Kai Cenat, IShowSpeed, Markiplier, Jacksepticeye, KSI, Logan Paul, Jake Paul, Dream (Minecraft), Corpse Husband, xQc, Pokimane, Valkyrae, Ninja, Joe Scott, Linus (LTT), Ryan Reynolds, Tom Hanks, Robert Downey Jr., Will Smith, Denzel Washington, Leonardo DiCaprio, Brad Pitt, Keanu Reeves, Nicolas Cage, Al Pacino, Robert De Niro, Arnold Schwarzenegger, Sylvester Stallone, Vin Diesel, Jason Statham, Tom Cruise, Johnny Depp, Scarlett Johansson, Angelina Jolie, Jennifer Aniston, Emma Watson, Margot Robbie, Sydney Sweeney, Zendaya, Timothee Chalamet, Pedro Pascal, Oscar Isaac, Benedict Cumberbatch, Ian McKellen, Patrick Stewart, Christopher Walken, Matthew McConaughey, Harrison Ford, Mark Wahlberg, Owen Wilson, Seth Rogen, Kevin Hart, Adam Sandler, Jim Carrey, Eddie Murphy, Robin Williams, Will Ferrell, Melissa McCarthy, Awkwafina, Jason Momoa, Idris Elba, Tom Hardy, Michael B. Jordan, Austin Butler, Glen Powell, Paul Giamatti, Bryan Cranston, Bob Odenkirk, Vladimir Putin, Queen Elizabeth II, Winston Churchill, Martin Luther King Jr., Kamala Harris, Bernie Sanders, Alexandria Ocasio-Cortez, Narendra Modi, Oprah Winfrey, Ellen DeGeneres, Dr. Phil, Steve Harvey, Trevor Noah, John Oliver, James Corden, Ryan Seacrest, Howard Stern, Conan O''Brien, Seth Meyers, Bill Nye, Neil deGrasse Tyson, Guy Fieri, Dave Chappelle, Chris Rock, Jerry Seinfeld, Ali Wong, John Mulaney, Hasan Minhaj, Nikki Glaser, Matt Rife, Gabriel Iglesias, Bo Burnham, Jeff Bezos, Bill Gates, Steve Jobs, Tim Cook, Sam Altman, Jensen Huang, Gilbert Gottfried, James May, Jeremy Clarkson, Richard Hammond, Bob Ross, Anthony Bourdain, David Goggins, Jordan Peterson, Joe Pesci, Danny DeVito, Seth MacFarlane, Patrick Warburton, Keith David, Mark Hamill, Liam Neeson, Antonio Banderas, Sofia Vergara, Penelope Cruz, Gal Gadot, Cate Blanchett, Viola Davis, Meryl Streep, Sandra Bullock, Reese Witherspoon, Salma Hayek, Lupita Nyong''o, Florence Pugh, Jenna Ortega, Ana de Armas, Jacob Elordi, Barry White, Dolly Parton, Willie Nelson, Lil Wayne, 50 Cent, Ice Cube, Tupac Shakur, Notorious B.I.G., Bob Dylan, David Bowie, Michael Jackson, Whitney Houston, Amy Winehouse, SZA, Tyler, The Creator, Thanos, Tony Stark, Captain Jack Sparrow, Walter White, Tommy Shelby, Michael Scott, Dwight Schrute, Bowser, Usain Bolt, Tyson Fury, Dana White, Pat McAfee, Giannis Antetokounmpo, Lex Fridman, Ben Shapiro, Tucker Carlson, Martha Stewart, Gordon Lightfoot, Lizzo, Megan Thee Stallion, Ice Spice, 21 Savage, Metro Boomin, Jack Harlow, Peso Pluma, BTS Jungkook, Quentin Tarantino, Werner Herzog, Anderson Cooper, Rachel Maddow, Mahatma Gandhi, Muhammad Ali, Princess Diana, Nelson Mandela, Steve Irwin, Morty Smith, Andrew Huberman, Willem Dafoe, Mike Rowe, Terminator, Deadpool, Plankton, Mr. Krabs, Picard'
+                      example: Elon Musk
+                  required:
+                  - prompt
+                  - voice_name
+                  description: The content used to generate speech.
+                  example:
+                    prompt: Hello, how are you?
+                    voice_name: Elon Musk
+              required:
+              - style
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cuid-example
+                    description: Unique ID of the audio. Use it with the [Get audio Project API](https://docs.magichour.ai/api-reference/audio-projects/get-audio-details) to fetch status and downloads.
+                  credits_charged:
+                    type: integer
+                    description: "The amount of credits deducted from your account to generate the audio. We charge credits right when the request is made. \n\nIf an error occurred while generating the audio, credits will be refunded and this field will be updated to include the refund."
+                    example: 1
+                required:
+                - id
+                - credits_charged
+                description: Success
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to generate speech
+                required:
+                - message
+                description: Unprocessable Entity
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: "from magic_hour import Client\nfrom os import getenv\n\nclient = Client(token=getenv(\"API_TOKEN\"))\nres = client.v1.ai_voice_generator.generate(\n    style={\"prompt\": \"Hello, how are you?\", \"voice_name\": \"Elon Musk\"},\n    name=\"Voice Generator audio\",\n    wait_for_completion=True,\n    download_outputs=True,\n    download_directory=\".\"\n)"
+      - lang: javascript
+        source: "import { Client } from \"magic-hour\";\n\nconst client = new Client({ token: process.env[\"API_TOKEN\"]!! });\nconst res = await client.v1.aiVoiceGenerator.generate(\n  {\n    name: \"Voice Generator audio\",\n    style: { prompt: \"Hello, how are you?\", voiceName: \"Elon Musk\" },\n  },\n  {\n    waitForCompletion: true,\n    downloadOutputs: true,\n    downloadDirectory: \".\",\n  },\n);"
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\tnullable \"github.com/magichourhq/magic-hour-go/nullable\"\n\tai_voice_generator \"github.com/magichourhq/magic-hour-go/resources/v1/ai_voice_generator\"\n\ttypes \"github.com/magichourhq/magic-hour-go/types\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.AiVoiceGenerator.Create(ai_voice_generator.CreateRequest{\n\t\tName: nullable.NewValue(\"My Voice Generator audio\"),\n\t\tStyle: types.V1AiVoiceGeneratorCreateBodyStyle{\n\t\t\tPrompt:    \"Hello, how are you?\",\n\t\t\tVoiceName: types.V1AiVoiceGeneratorCreateBodyStyleVoiceNameEnumElonMusk,\n\t\t},\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .ai_voice_generator()\n    .create(magic_hour::resources::v1::ai_voice_generator::CreateRequest {\n        name: Some(\"My Voice Generator audio\".to_string()),\n        style: magic_hour::models::V1AiVoiceGeneratorCreateBodyStyle {\n            prompt: \"Hello, how are you?\".to_string(),\n            voice_name: magic_hour::models::V1AiVoiceGeneratorCreateBodyStyleVoiceNameEnum::ElonMusk,\n        },\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request POST \\\n     --url https://api.magichour.ai/v1/ai-voice-generator \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>' \\\n     --header 'content-type: application/json' \\\n     --data '\n{\n  \"name\": \"My Voice Generator audio\",\n  \"style\": {\n    \"prompt\": \"Hello, how are you?\",\n    \"voice_name\": \"Elon Musk\"\n  }\n}\n'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/ai-voice-generator\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"POST\",\n  CURLOPT_POSTFIELDS => json_encode([\n    'name' => 'My Voice Generator audio',\n    'style' => [\n        'prompt' => 'Hello, how are you?',\n        'voice_name' => 'Elon Musk'\n    ]\n  ]),\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\",\n    \"content-type: application/json\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/ai-voice-generator\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Voice Generator audio\\\",\\\"style\\\":{\\\"prompt\\\":\\\"Hello, how are you?\\\",\\\"voice_name\\\":\\\"Elon Musk\\\"}}\")\n  .asString();"
+  /v1/ai-voice-cloner:
+    post:
+      description: "Clone a voice from an audio sample and generate speech. \n* Each character costs 0.1 credits. \n* The cost is rounded up to the nearest whole number"
+      summary: AI Voice Cloner
+      tags:
+      - Audio Projects
+      parameters: []
+      operationId: aiVoiceCloner.createAudio
+      requestBody:
+        required: true
+        description: Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Give your audio a custom name for easy identification.
+                  example: My Voice Cloner audio
+                  default: Voice Cloner - dateTime
+                assets:
+                  type: object
+                  properties:
+                    audio_file_path:
+                      type: string
+                      minLength: 1
+                      description: 'The audio used to clone the voice. This value is either
+
+                        - a direct URL to the video file
+
+                        - `file_path` field from the response of the [upload urls API](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls).
+
+
+                        See the [file upload guide](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls#input-file) for details.
+
+                        '
+                      example: api-assets/id/1234.mp3
+                  required:
+                  - audio_file_path
+                  description: Provide the assets for voice cloning.
+                style:
+                  type: object
+                  properties:
+                    prompt:
+                      type: string
+                      minLength: 1
+                      maxLength: 1000
+                      description: Text used to generate speech from the cloned voice. The character limit is 1000 characters.
+                      example: Hello, this is my cloned voice.
+                  required:
+                  - prompt
+              required:
+              - assets
+              - style
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: cuid-example
+                    description: Unique ID of the audio. Use it with the [Get audio Project API](https://docs.magichour.ai/api-reference/audio-projects/get-audio-details) to fetch status and downloads.
+                  credits_charged:
+                    type: integer
+                    description: "The amount of credits deducted from your account to generate the audio. We charge credits right when the request is made. \n\nIf an error occurred while generating the audio, credits will be refunded and this field will be updated to include the refund."
+                    example: 1
+                required:
+                - id
+                - credits_charged
+                description: Success
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to clone voice
+                required:
+                - message
+                description: Unprocessable Entity
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: "from magic_hour import Client\nfrom os import getenv\n\nclient = Client(token=getenv(\"API_TOKEN\"))\nres = client.v1.ai_voice_cloner.create(\n    assets={\"audio_file_path\": \"api-assets/id/1234.mp3\"},\n    style={\"prompt\": \"Hello, this is my cloned voice.\"},\n    name=\"My Voice Cloner audio\",\n)"
+      - lang: javascript
+        source: "import { Client } from \"magic-hour\";\n\nconst client = new Client({ token: process.env[\"API_TOKEN\"]!! });\nconst res = await client.v1.aiVoiceCloner.generate(\n  {\n    assets: { audioFilePath: \"/path/to/audio.mp3\" },\n    name: \"Voice Cloner audio\",\n    style: { prompt: \"Hello, this is my cloned voice.\" },\n  },\n  {\n    waitForCompletion: true,\n    downloadOutputs: true,\n    downloadDirectory: \".\",\n  },\n);"
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\tnullable \"github.com/magichourhq/magic-hour-go/nullable\"\n\tai_voice_cloner \"github.com/magichourhq/magic-hour-go/resources/v1/ai_voice_cloner\"\n\ttypes \"github.com/magichourhq/magic-hour-go/types\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.AiVoiceCloner.Create(ai_voice_cloner.CreateRequest{\n\t\tAssets: types.V1AiVoiceClonerCreateBodyAssets{\n\t\t\tAudioFilePath: \"api-assets/id/1234.mp3\",\n\t\t},\n\t\tName: nullable.NewValue(\"My Voice Cloner audio\"),\n\t\tStyle: types.V1AiVoiceClonerCreateBodyStyle{\n\t\t\tPrompt: \"Hello, this is my cloned voice.\",\n\t\t},\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .ai_voice_cloner()\n    .create(magic_hour::resources::v1::ai_voice_cloner::CreateRequest {\n        assets: magic_hour::models::V1AiVoiceClonerCreateBodyAssets {\n            audio_file_path: \"api-assets/id/1234.mp3\".to_string(),\n        },\n        name: Some(\"My Voice Cloner audio\".to_string()),\n        style: magic_hour::models::V1AiVoiceClonerCreateBodyStyle {\n            prompt: \"Hello, this is my cloned voice.\".to_string(),\n        },\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request POST \\\n     --url https://api.magichour.ai/v1/ai-voice-cloner \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>' \\\n     --header 'content-type: application/json' \\\n     --data '\n{\n  \"name\": \"My Voice Cloner audio\",\n  \"assets\": {\n    \"audio_file_path\": \"api-assets/id/1234.mp3\"\n  },\n  \"style\": {\n    \"prompt\": \"Hello, this is my cloned voice.\"\n  }\n}\n'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/ai-voice-cloner\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"POST\",\n  CURLOPT_POSTFIELDS => json_encode([\n    'name' => 'My Voice Cloner audio',\n    'assets' => [\n        'audio_file_path' => 'api-assets/id/1234.mp3'\n    ],\n    'style' => [\n        'prompt' => 'Hello, this is my cloned voice.'\n    ]\n  ]),\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\",\n    \"content-type: application/json\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/ai-voice-cloner\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Voice Cloner audio\\\",\\\"assets\\\":{\\\"audio_file_path\\\":\\\"api-assets/id/1234.mp3\\\"},\\\"style\\\":{\\\"prompt\\\":\\\"Hello, this is my cloned voice.\\\"}}\")\n  .asString();"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer authentication header of the form `Bearer <api_key>`, where `<api_key>` is your API key. To get your API key, go to [Developer Hub](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference) and click "Create new API Key".

@@ -1,0 +1,516 @@
+openapi: 3.2.0
+info:
+  title: Magic Hour Files API
+  version: beta
+  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  termsOfService: https://magichour.ai/terms-of-service
+servers:
+- url: https://api.magichour.ai
+tags:
+- name: Files
+  description: API related to uploading assets used for video generation
+paths:
+  /v1/files/upload-urls:
+    post:
+      description: "Generates a list of pre-signed upload URLs for the assets required. This API is only necessary if you want to upload to Magic Hour's storage. Refer to the [Input Files Guide](https://docs.magichour.ai/integration/inputs-and-outputs) for more details.\n\nThe response array will match the order of items in the request body.\n\n**Valid file extensions per asset type**:\n- video: mp4, m4v, mov, webm\n- audio: mp3, wav, aac, flac, webm, weba, m4a, opus, ogg, oga, aiff, amr\n- image: png, jpg, jpeg, jfif, heic, heif, webp, avif, jp2, tiff, tif, bmp\n- gif: gif, webp, webm\n\n> Note: `gif` is only supported for face swap API `video_file_path` field.\n\nOnce you receive an upload URL, send a `PUT` request to upload the file directly.\n\nExample:\n\n```\ncurl -X PUT --data '@/path/to/file/video.mp4' \\\n  https://videos.magichour.ai/api-assets/id/video.mp4?<auth params from the API response>\n```\n"
+      summary: Generate asset upload urls
+      tags:
+      - Files
+      parameters: []
+      operationId: videoAssets.generatePresignedUrl
+      requestBody:
+        required: true
+        description: Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - video
+                        - audio
+                        - image
+                        description: The type of asset to upload. Possible types are video, audio, image
+                        example: video
+                      extension:
+                        type: string
+                        pattern: ^[a-z0-9]+$
+                        description: The extension of the file to upload. Do not include the dot (.) before the extension. Possible extensions are mp4,m4v,mov,webm,mp3,wav,aac,flac,webm,weba,m4a,opus,ogg,oga,aiff,amr,png,jpg,jpeg,jfif,heic,heif,webp,avif,jp2,tiff,tif,bmp,gif,webp,webm
+                        example: mp4
+                    required:
+                    - type
+                    - extension
+                  minItems: 1
+                  description: The list of assets to upload. The response array will match the order of items in the request body.
+                  example:
+                  - type: video
+                    extension: mp4
+                  - type: audio
+                    extension: mp3
+              required:
+              - items
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        upload_url:
+                          type: string
+                          format: uri
+                          description: Used to upload the file to storage, send a PUT request with the file as data to upload.
+                          example: https://videos.magichour.ai/id/video.mp4?auth-value=1234567890
+                        expires_at:
+                          type: string
+                          format: date-time
+                          description: when the upload url expires, and will need to request a new one.
+                          example: '2024-07-21T17:32:28Z'
+                        file_path:
+                          type: string
+                          description: this value is used in APIs that needs assets, such as image_file_path, video_file_path, and audio_file_path
+                          example: video/id/1234.mp4
+                      required:
+                      - upload_url
+                      - expires_at
+                      - file_path
+                    description: The list of upload URLs and file paths for the assets. The response array will match the order of items in the request body. Refer to the [Input Files Guide](https://docs.magichour.ai/integration/inputs-and-outputs) for more details.
+                    example:
+                    - upload_url: https://videos.magichour.ai/api-assets/id/video.mp4?auth-value=1234567890
+                      expires_at: '2024-07-25T16:56:21.932Z'
+                      file_path: api-assets/id/video.mp4
+                    - upload_url: https://videos.magichour.ai/api-assets/id/audio.mp3?auth-value=1234567890
+                      expires_at: '2024-07-25T16:56:21.932Z'
+                      file_path: api-assets/id/audio.mp3
+                required:
+                - items
+                description: Success
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: '''mp4'' is an invalid audio extension. Possible extensions are ''mp3, wav, aac, flac, webm, weba, m4a, opus, ogg, oga, aiff, amr'''
+                required:
+                - message
+                description: Unprocessable Entity
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: "from magic_hour import Client\nfrom os import getenv\n\nclient = Client(token=getenv(\"API_TOKEN\"))\nres = client.v1.files.upload_urls.create(\n    items=[\n        {\"extension\": \"mp4\", \"type_\": \"video\"},\n        {\"extension\": \"mp3\", \"type_\": \"audio\"},\n    ]\n)"
+      - lang: javascript
+        source: "import { Client } from \"magic-hour\";\n\nconst client = new Client({ token: process.env[\"API_TOKEN\"]!! });\nconst res = await client.v1.files.uploadUrls.create({\n  items: [\n    { extension: \"mp4\", type: \"video\" },\n    { extension: \"mp3\", type: \"audio\" },\n  ],\n});"
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\tupload_urls \"github.com/magichourhq/magic-hour-go/resources/v1/files/upload_urls\"\n\ttypes \"github.com/magichourhq/magic-hour-go/types\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.Files.UploadUrls.Create(upload_urls.CreateRequest{\n\t\tItems: []types.V1FilesUploadUrlsCreateBodyItemsItem{\n\t\t\ttypes.V1FilesUploadUrlsCreateBodyItemsItem{\n\t\t\t\tExtension: \"mp4\",\n\t\t\t\tType:      types.V1FilesUploadUrlsCreateBodyItemsItemTypeEnumVideo,\n\t\t\t},\n\t\t\ttypes.V1FilesUploadUrlsCreateBodyItemsItem{\n\t\t\t\tExtension: \"mp3\",\n\t\t\t\tType:      types.V1FilesUploadUrlsCreateBodyItemsItemTypeEnumAudio,\n\t\t\t},\n\t\t},\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .files()\n    .upload_urls()\n    .create(magic_hour::resources::v1::files::upload_urls::CreateRequest {\n        items: vec![\n            magic_hour::models::V1FilesUploadUrlsCreateBodyItemsItem { extension :\n            \"mp4\".to_string(), type_ :\n            magic_hour::models::V1FilesUploadUrlsCreateBodyItemsItemTypeEnum::Video\n            }, magic_hour::models::V1FilesUploadUrlsCreateBodyItemsItem { extension :\n            \"mp3\".to_string(), type_ :\n            magic_hour::models::V1FilesUploadUrlsCreateBodyItemsItemTypeEnum::Audio }\n        ],\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request POST \\\n     --url https://api.magichour.ai/v1/files/upload-urls \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>' \\\n     --header 'content-type: application/json' \\\n     --data '\n{\n  \"items\": [\n    {\n      \"type\": \"video\",\n      \"extension\": \"mp4\"\n    },\n    {\n      \"type\": \"audio\",\n      \"extension\": \"mp3\"\n    }\n  ]\n}\n'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/files/upload-urls\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"POST\",\n  CURLOPT_POSTFIELDS => json_encode([\n    'items' => [\n        [\n                'type' => 'video',\n                'extension' => 'mp4'\n        ],\n        [\n                'type' => 'audio',\n                'extension' => 'mp3'\n        ]\n    ]\n  ]),\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\",\n    \"content-type: application/json\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/files/upload-urls\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"items\\\":[{\\\"type\\\":\\\"video\\\",\\\"extension\\\":\\\"mp4\\\"},{\\\"type\\\":\\\"audio\\\",\\\"extension\\\":\\\"mp3\\\"}]}\")\n  .asString();"
+  /v1/face-detection/{id}:
+    get:
+      description: "Get the details of a face detection task. \n\nUse this API to get the list of faces detected in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo) or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API calls for multi-face swaps."
+      summary: Get face detection details
+      tags:
+      - Files
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          example: uuid-example
+        description: The id of the task. This value is returned by the [face detection API](https://docs.magichour.ai/api-reference/files/face-detection#response-id).
+      operationId: faceDetection.getDetails
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The id of the task. This value is returned by the [face detection API](https://docs.magichour.ai/api-reference/files/face-detection#response-id).
+                    example: uuid-example
+                  credits_charged:
+                    type: integer
+                    description: The credits charged for the task.
+                    example: 0
+                  status:
+                    type: string
+                    enum:
+                    - queued
+                    - rendering
+                    - complete
+                    - error
+                    description: The status of the detection.
+                    example: complete
+                  faces:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                          description: The path to the face image. This should be used in face swap photo/video API calls as `.assets.face_mappings.original_face`
+                          example: api-assets/id/0-0.png
+                        url:
+                          type: string
+                          description: The url to the face image. This is used to render the image in your applications.
+                          example: https://videos.magichour.ai/api-assets/id/0-0.png
+                      required:
+                      - path
+                      - url
+                    description: The faces detected in the image or video. The list is populated as faces are detected.
+                    example:
+                    - path: api-assets/id/0-0.png
+                      url: https://videos.magichour.ai/api-assets/id/0-0.png
+                required:
+                - id
+                - credits_charged
+                - status
+                - faces
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to get face detection details
+                required:
+                - message
+                description: Unprocessable Entity
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: 'from magic_hour import Client
+
+          from os import getenv
+
+
+          client = Client(token=getenv("API_TOKEN"))
+
+          res = client.v1.face_detection.get(id="uuid-example")'
+      - lang: javascript
+        source: 'import { Client } from "magic-hour";
+
+
+          const client = new Client({ token: process.env["API_TOKEN"]!! });
+
+          const res = await client.v1.faceDetection.get({ id: "uuid-example" });'
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\tface_detection \"github.com/magichourhq/magic-hour-go/resources/v1/face_detection\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.FaceDetection.Get(face_detection.GetRequest{\n\t\tId: \"uuid-example\",\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .face_detection()\n    .get(magic_hour::resources::v1::face_detection::GetRequest {\n        id: \"uuid-example\".to_string(),\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request GET \\\n     --url https://api.magichour.ai/v1/face-detection/id \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/face-detection/id\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"GET\",\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.get(\"https://api.magichour.ai/v1/face-detection/id\")\n  .header(\"accept\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .asString();"
+  /v1/face-detection:
+    post:
+      description: "Detect faces in an image or video. \n      \nUse this API to get the list of faces detected in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo) or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API calls for multi-face swaps.\n\nNote: Face detection is free to use for the near future. Pricing may change in the future."
+      summary: Face Detection
+      tags:
+      - Files
+      parameters: []
+      operationId: faceDetection.detectFaces
+      requestBody:
+        required: true
+        description: Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                confidence_score:
+                  default: 0.5
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  multipleOf: 0.05
+                  description: "Confidence threshold for filtering detected faces. \n* Higher values (e.g., 0.9) include only faces detected with high certainty, reducing false positives. \n* Lower values (e.g., 0.3) include more faces, but may increase the chance of incorrect detections."
+                  example: 0.5
+                assets:
+                  type: object
+                  properties:
+                    target_file_path:
+                      type: string
+                      description: 'This is the image or video where the face will be detected. This value is either
+
+                        - a direct URL to the video file
+
+                        - `file_path` field from the response of the [upload urls API](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls).
+
+
+                        See the [file upload guide](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls#input-file) for details.
+
+                        '
+                      example: api-assets/id/1234.png
+                  required:
+                  - target_file_path
+                  description: Provide the assets for face detection
+              required:
+              - assets
+      responses:
+        '200':
+          description: '200'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: The id of the task. Use this value in the [get face detection details API](https://docs.magichour.ai/api-reference/files/get-face-detection-details) to get the details of the face detection task.
+                    example: uuid-example
+                  credits_charged:
+                    type: integer
+                    description: The credits charged for the task.
+                required:
+                - id
+                - credits_charged
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request is invalid
+                example:
+                  message: Missing request body
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Unauthorized
+                required:
+                - message
+                description: The request is not properly authenticated
+                example:
+                  message: Unauthorized
+        '402':
+          description: Payment Required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required:
+                - message
+                description: The request requires payment
+                example:
+                  message: Payment required
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                    - Not Found
+                required:
+                - message
+                description: Requested resource is not found
+                example:
+                  message: Not Found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to trigger face detection
+                required:
+                - message
+                description: Unprocessable Entity
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: python
+        source: "from magic_hour import Client\nfrom os import getenv\n\nclient = Client(token=getenv(\"API_TOKEN\"))\nres = client.v1.face_detection.generate(\n    assets={\"target_file_path\": \"/path/to/1234.png\"}, confidence_score=0.5\n    wait_for_completion=True,\n    download_outputs=True,\n    download_directory=\".\"\n)"
+      - lang: javascript
+        source: "import { Client } from \"magic-hour\";\n\nconst client = new Client({ token: process.env[\"API_TOKEN\"]!! });\nconst client = new Client({ token: process.env[\"API_TOKEN\"]!! });\nconst res = await client.v1.faceDetection.generate(\n  {\n    assets: { targetFilePath: \"/path/to/1234.png\" },\n    confidenceScore: 0.5,\n  },\n  {\n    waitForCompletion: true,\n    downloadOutputs: true,\n    downloadDirectory: \".\",\n  },\n});"
+      - lang: go
+        source: "package main\n\nimport (\n\tos \"os\"\n\n\tsdk \"github.com/magichourhq/magic-hour-go/client\"\n\tnullable \"github.com/magichourhq/magic-hour-go/nullable\"\n\tface_detection \"github.com/magichourhq/magic-hour-go/resources/v1/face_detection\"\n\ttypes \"github.com/magichourhq/magic-hour-go/types\"\n)\n\nfunc main() {\n\tclient := sdk.NewClient(\n\t\tsdk.WithBearerAuth(os.Getenv(\"API_TOKEN\")),\n\t)\n\tres, err := client.V1.FaceDetection.Create(face_detection.CreateRequest{\n\t\tAssets: types.V1FaceDetectionCreateBodyAssets{\n\t\t\tTargetFilePath: \"api-assets/id/1234.png\",\n\t\t},\n\t\tConfidenceScore: nullable.NewValue(0.5),\n\t})\n}"
+      - lang: rust
+        source: "let client = magic_hour::Client::default()\n    .with_bearer_auth(&std::env::var(\"API_TOKEN\").unwrap());\nlet res = client\n    .v1()\n    .face_detection()\n    .create(magic_hour::resources::v1::face_detection::CreateRequest {\n        assets: magic_hour::models::V1FaceDetectionCreateBodyAssets {\n            target_file_path: \"api-assets/id/1234.png\".to_string(),\n        },\n        confidence_score: Some(0.5),\n    })\n    .await;"
+      - lang: curl
+        source: "curl --request POST \\\n     --url https://api.magichour.ai/v1/face-detection \\\n     --header 'accept: application/json' \\\n     --header 'authorization: Bearer <token>' \\\n     --header 'content-type: application/json' \\\n     --data '\n{\n  \"confidence_score\": 0.5,\n  \"assets\": {\n    \"target_file_path\": \"api-assets/id/1234.png\"\n  }\n}\n'"
+      - lang: php
+        source: "<?php\n\n$curl = curl_init();\n\ncurl_setopt_array($curl, [\n  CURLOPT_URL => \"https://api.magichour.ai/v1/face-detection\",\n  CURLOPT_RETURNTRANSFER => true,\n  CURLOPT_ENCODING => \"\",\n  CURLOPT_MAXREDIRS => 10,\n  CURLOPT_TIMEOUT => 30,\n  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,\n  CURLOPT_CUSTOMREQUEST => \"POST\",\n  CURLOPT_POSTFIELDS => json_encode([\n    'confidence_score' => 0.5,\n    'assets' => [\n        'target_file_path' => 'api-assets/id/1234.png'\n    ]\n  ]),\n  CURLOPT_HTTPHEADER => [\n    \"accept: application/json\",\n    \"authorization: Bearer <token>\",\n    \"content-type: application/json\"\n  ],\n]);\n\n$response = curl_exec($curl);\n$err = curl_error($curl);\n\ncurl_close($curl);\n\nif ($err) {\n  echo \"cURL Error #:\" . $err;\n} else {\n  echo $response;\n}"
+      - lang: java
+        source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/face-detection\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"confidence_score\\\":0.5,\\\"assets\\\":{\\\"target_file_path\\\":\\\"api-assets/id/1234.png\\\"}}\")\n  .asString();"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Bearer authentication header of the form `Bearer <api_key>`, where `<api_key>` is your API key. To get your API key, go to [Developer Hub](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference) and click "Create new API Key".
