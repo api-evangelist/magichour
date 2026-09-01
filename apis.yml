@@ -26,10 +26,10 @@ created: '2026-08-22'
 modified: '2026-08-22'
 specificationVersion: '0.23'
 tags:
-- ai video
-- image generation
+- AI Video
+- Image-Generation
 - Audio
-- generative ai
+- Generative AI
 tags_raw:
 - ai video
 - image generation
