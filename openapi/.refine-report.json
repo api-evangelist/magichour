@@ -1,0 +1,22 @@
+{
+  "provider": "magichour",
+  "sources": [
+    "magichour-api-openapi.yml"
+  ],
+  "outputs": [
+    "magichour-audio-projects-api-openapi.yml",
+    "magichour-files-api-openapi.yml",
+    "magichour-image-projects-api-openapi.yml",
+    "magichour-video-projects-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/magichour-api-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "magichour-api-openapi.yml: upgraded openapi 3.0.2 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+4 apis, 4 total)"
+  ],
+  "skipped": []
+}

@@ -23,18 +23,23 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 created: '2026-08-22'
-modified: '2026-08-22'
+modified: '2026-09-03'
+image: https://magichour.ai/logo-social.png
 specificationVersion: '0.23'
 tags:
 - AI Video
 - Image-Generation
 - Audio
 - Generative AI
+- Voice Cloning
+- Text-To-Video
 tags_raw:
 - ai video
 - image generation
 - audio
 - generative ai
+- voice cloning
+- text to video
 apis:
 - aid: magichour:magichour-audio-projects-api
   name: Magic Hour Audio Projects API
@@ -46,6 +51,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/magichour-audio-projects-api-openapi.yml
+  - type: Overlay
+    url: overlays/magichour-audio-projects-overlay.yaml
   - type: Documentation
     url: https://docs.magichour.ai
   - type: APIReference
@@ -68,6 +75,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/magichour-files-api-openapi.yml
+  - type: Overlay
+    url: overlays/magichour-files-overlay.yaml
   - type: Documentation
     url: https://docs.magichour.ai
   - type: APIReference
@@ -88,6 +97,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/magichour-image-projects-api-openapi.yml
+  - type: Overlay
+    url: overlays/magichour-image-projects-overlay.yaml
   - type: Documentation
     url: https://docs.magichour.ai
   - type: APIReference
@@ -108,6 +119,8 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/magichour-video-projects-api-openapi.yml
+  - type: Overlay
+    url: overlays/magichour-video-projects-overlay.yaml
   - type: Documentation
     url: https://docs.magichour.ai
   - type: APIReference
@@ -119,12 +132,64 @@ apis:
   - type: Webhooks
     url: https://docs.magichour.ai/integration/webhook/overview
 common:
+- type: DomainSecurity
+  url: security/magichour-domain-security.yml
+- type: Authentication
+  url: authentication/magichour-authentication.yml
 - type: LLMsTxt
   url: llms/magichour-llms.txt
 - type: Website
   url: https://magichour.ai
 - type: DeveloperPortal
   url: https://docs.magichour.ai
+- type: Packages
+  url: packages/magichour-packages.yml
+- type: SDKs
+  url: packages/magichour-packages.yml
+- type: WellKnown
+  url: well-known/magichour-well-known.yml
+- type: MCPServer
+  url: mcp/magichour-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/magichour-tool-crosswalk.yml
+- type: AgentCard
+  url: a2a/magichour-a2a.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conformance
+  url: conformance/magichour-conformance.yml
+- type: ErrorCatalog
+  url: errors/magichour-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/magichour-lifecycle.yml
+- type: StatusPage
+  url: lifecycle/magichour-lifecycle.yml
+- type: Conventions
+  url: conventions/magichour-conventions.yml
+- type: ChangeLog
+  url: changelog/magichour-changelog.yml
+- type: Sandbox
+  url: sandbox/magichour-sandbox.yml
+- type: Plans
+  url: plans/magichour-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/magichour-rate-limits.yml
+- type: DataModel
+  url: data-model/magichour-data-model.yml
+- type: Webhooks
+  url: asyncapi/magichour-webhooks.yml
+- type: Pricing
+  url: https://magichour.ai/pricing
+- type: GitHubOrganization
+  url: https://github.com/magichourhq
+- type: Blog
+  url: https://magichour.ai/blog
+- type: TermsOfService
+  url: https://magichour.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://magichour.ai/privacy-policy
+- type: Login
+  url: https://magichour.ai/developer
 maintainers:
 - FN: Magic Hour
   email: runbo@magichour.ai
@@ -146,3 +211,8 @@ x-provenance:
     correct gating on a live host.
     Two DIFFERENT llms.txt files exist, one on magichour.ai and one on docs.magichour.ai. Both are
     kept; the docs one is the richer and is what this profile was built from.
+x-enrichment:
+  date: '2026-09-03'
+  status: enriched
+  artifacts_added: 30
+  pass: local-v2

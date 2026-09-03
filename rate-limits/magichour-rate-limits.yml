@@ -1,0 +1,26 @@
+name: Magic Hour rate limits
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/billing/subscription-pricing.md and https://docs.magichour.ai/get-started/quick-start.md
+limit_count: 3
+limits:
+- scope: per-account (Creator plan)
+  type: concurrency
+  limit: 3
+  unit: concurrent generations
+- scope: per-account (Pro plan)
+  type: concurrency
+  limit: 5
+  unit: concurrent generations
+- scope: per-account (Business plan)
+  type: concurrency
+  limit: unlimited
+  unit: concurrent generations
+response_signaling:
+  status_code: 429
+  headers: []
+  note: 429 Too Many Requests is documented with retry-with-exponential-backoff guidance, but no X-RateLimit-*,
+    RateLimit-* or Retry-After response headers are documented. 402 signals credit exhaustion and 403 signals a
+    plan-gated model/resolution — both act as spend guards distinct from throttling.
+note: The published throttle model is plan-tier concurrency on generation jobs rather than requests-per-window;
+  no per-second/minute request quota is documented.

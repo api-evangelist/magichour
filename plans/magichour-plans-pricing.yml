@@ -1,0 +1,77 @@
+name: Magic Hour plans and pricing
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/billing/overview.md, subscription-pricing.md, usage-based-pricing.md; https://magichour.ai/pricing
+currency: USD
+pricing_model: credits — every generation consumes credits priced per model/endpoint (https://docs.magichour.ai/api-reference/models);
+  funded by subscription, one-time credit packs, or usage-based billing
+plan_count: 7
+plans:
+- name: Creator
+  price: 19
+  billing_period: monthly
+  annual_equivalent: $12/month ($144/yr)
+  included_credits_per_month: 12000
+  limits:
+    uploads: 2GB
+    concurrent_generations: 3
+- name: Pro
+  price: 39
+  billing_period: monthly
+  annual_equivalent: $25/month ($300/yr)
+  included_credits_per_month: 25000
+  limits:
+    uploads: 5GB
+    concurrent_generations: 5
+- name: Business
+  price: 99
+  billing_period: monthly
+  annual_equivalent: $66/month ($792/yr)
+  included_credits_per_month: 70000
+  limits:
+    uploads: 10GB
+    concurrent_generations: unlimited
+- name: Starter credit pack
+  price: 10
+  billing_period: one-time
+  credits: 4000
+  discount: 0%
+- name: Standard credit pack
+  price: 27
+  billing_period: one-time
+  credits: 12000
+  discount: 10%
+- name: Large credit pack
+  price: 64
+  billing_period: one-time
+  credits: 32000
+  discount: 20%
+- name: Max credit pack
+  price: 120
+  billing_period: one-time
+  credits: 64000
+  discount: 25%
+usage_based:
+  availability: by request (setup assistance required)
+  base_rates_per_credit:
+    Creator: 0.0012
+    Pro: 0.00195
+    Business: 0.0025
+  volume_discount_bands:
+  - credits: 1-100,000
+    discount: 0%
+  - credits: 100,001-1,000,000
+    discount: 10%
+  - credits: 1,000,001-5,000,000
+    discount: 20%
+  - credits: 5,000,001-10,000,000
+    discount: 30%
+  - credits: 10,000,001-50,000,000
+    discount: 40%
+  - credits: 50,000,001+
+    discount: 50%
+  note: Graduated banding — each band price applies only to credits inside that band.
+notes:
+- Unused prepaid credits never expire (subscriptions and packs).
+- Paid plans remove watermarks, include commercial use, and unlock higher per-tool resolutions (https://docs.magichour.ai/billing/resolution-limits).
+- Credit packs do not carry plan benefits beyond watermark removal.

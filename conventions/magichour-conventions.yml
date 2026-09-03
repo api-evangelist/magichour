@@ -1,0 +1,71 @@
+name: Magic Hour API conventions
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai (quick-start, integration, webhook, billing pages) + openapi/_original/magichour-openapi.json
+auth:
+  style: bearer API key
+  header: 'Authorization: Bearer <api_key>'
+  key_prefix: mhk_live_
+  details: authentication/magichour-authentication.yml
+async_pattern:
+  style: create → poll/webhook → download
+  detail: Every generation POST returns { id, credits_charged } immediately and renders asynchronously. Progress
+    via GET /v1/{video|image|audio}-projects/{id} (statuses queued/rendering/complete/error/canceled) or signed
+    webhooks. Results are expiring downloads[].url links.
+idempotency:
+  coverage: none
+  header: null
+  note: No Idempotency-Key or replay protection is documented anywhere. The docs state that a 502 before a project
+    id was returned means no job was created and the request may be resubmitted; a retried successful create is
+    a second billable job.
+pagination:
+  style: none
+  note: No list endpoints exist in the contract; only per-id gets and creates.
+versioning:
+  style: URL path
+  value: /v1
+error_envelope:
+  shape: '{ "message": string }'
+  format: proprietary-json
+  details: errors/magichour-problem-types.yml
+rate_limit_signaling:
+  status_code: 429
+  headers: null
+  note: 429 with retry-with-backoff guidance is documented; no X-RateLimit-*/RateLimit-*/Retry-After response headers
+    are documented. Plan-tier concurrency limits are the published throttle — see rate-limits/magichour-rate-limits.yml.
+request_id_tracing:
+  documented: false
+field_expansion:
+  documented: false
+metadata:
+  documented: false
+webhooks:
+  signing: HMAC-SHA256
+  headers:
+  - magic-hour-event-signature
+  - magic-hour-event-timestamp
+  details: asyncapi/magichour-webhooks.yml
+reversibility:
+  grade: none
+  note: 'No reversal operations exist for the credit-consuming write surface: a generation job cannot be un-billed
+    via the API and no cancel operation is exposed (the canceled status is set from the web app). The three delete
+    operations are explicitly documented as permanent.'
+  writes:
+  - operation: '*.createVideo / *.createImage / *.createAudio (31 generators)'
+    reversal: null
+    note: Credits are charged at submission; no API cancel or refund operation exists in the 36-operation contract.
+  - operation: videoProjects.delete
+    reversal: null
+    note: '"Permanently delete the rendered video. This action is not reversible" — provider tool description.'
+  - operation: imageProjects.delete
+    reversal: null
+    note: '"Permanently delete the rendered image(s). This action is not reversible" — provider tool description.'
+  - operation: audioProjects.delete
+    reversal: null
+    note: '"Permanently delete the rendered audio file(s). This action is not reversible" — provider tool description.'
+cross_links:
+- errors/magichour-problem-types.yml
+- lifecycle/magichour-lifecycle.yml
+- authentication/magichour-authentication.yml
+- rate-limits/magichour-rate-limits.yml
+- sandbox/magichour-sandbox.yml

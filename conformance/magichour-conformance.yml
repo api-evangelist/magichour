@@ -1,0 +1,41 @@
+name: Magic Hour standards conformance
+generated: '2026-09-03'
+method: derived
+source: openapi/_original/magichour-openapi.json, well-known/ probes, https://docs.magichour.ai webhook and auth
+  docs
+standards:
+- id: oauth2
+  conforms: true
+  evidence: mcp.magichour.ai publishes RFC 8414 authorization-server metadata (authorization, token, and dynamic
+    registration endpoints) and an RFC 9728 oauth-protected-resource document for the MCP surface; saved under well-known/.
+    The REST API itself uses static bearer API keys, not OAuth.
+- id: oidc
+  conforms: false
+  evidence: No openid-configuration on any host (all 404, probed 2026-09-03).
+- id: rfc9457
+  conforms: false
+  evidence: Errors are a proprietary {message} application/json envelope on every 4xx in the spec, not application/problem+json.
+- id: pagination
+  conforms: false
+  evidence: The API exposes no list/collection endpoints — 36 operations are create/get/delete on single projects
+    — so no pagination convention exists.
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or replay-protection mechanism appears in the spec or docs; the docs advise
+    only retrying creates that failed before returning an id.
+- id: mcp
+  conforms: true
+  evidence: Hosted MCP server at mcp.magichour.ai (streamable HTTP) answered tools/list with 44 tools on 2026-09-03;
+    server card at /.well-known/mcp/server-card.json.
+- id: a2a
+  conforms: true
+  evidence: Agent card served at docs.magichour.ai/.well-known/agent-card.json declaring protocolVersion 0.3; graded
+    conformant in a2a/magichour-a2a.yml.
+- id: webhook-hmac
+  conforms: true
+  evidence: Webhooks are signed with HMAC-SHA256 via magic-hour-event-signature and magic-hour-event-timestamp headers
+    (docs.magichour.ai/integration/webhook/secure-handler).
+domain_standard:
+  present: false
+  note: The AI media-generation market has no declared domain interchange standard to conform to; nothing in the
+    contract signals one. Reward-only check — honestly absent.

@@ -1,0 +1,87 @@
+name: Magic Hour data model
+generated: '2026-09-03'
+method: derived
+source: openapi/_original/magichour-openapi.json paths and inline response shapes
+note: 'The OpenAPI declares zero reusable component schemas — every shape is inline — so this graph is derived from
+  paths and id-reference fields. Projects are the central entity: every generator create returns a project id in
+  its media family.'
+entities:
+- name: VideoProject
+  id_path: /v1/video-projects/{id}
+  fields:
+  - id
+  - status
+  - downloads[]
+  - error
+  - credits_charged
+  statuses:
+  - queued
+  - rendering
+  - complete
+  - error
+  - canceled
+  - draft
+- name: ImageProject
+  id_path: /v1/image-projects/{id}
+  fields:
+  - id
+  - status
+  - downloads[]
+  - error
+  - credits_charged
+- name: AudioProject
+  id_path: /v1/audio-projects/{id}
+  fields:
+  - id
+  - status
+  - downloads[]
+  - error
+  - credits_charged
+- name: FaceDetection
+  id_path: /v1/face-detection/{id}
+  fields:
+  - id
+  - status
+  - faces[]
+- name: UploadedAsset
+  id_path: /v1/files/upload-urls
+  fields:
+  - upload_url
+  - file_path
+  note: Presigned upload slots for video/audio/image inputs; referenced by key in generator create calls.
+relationships:
+- from: VideoProject
+  relation: belongs_to
+  to: 11 video generators
+  via: create response id (aiTalkingPhoto, aiVideoEditor, animation, audioToVideo, autoSubtitleGenerator, characterReplace,
+    faceSwap, imageToVideo, lipSync, textToVideo, videoToVideo)
+- from: ImageProject
+  relation: belongs_to
+  to: 13 image generators
+  via: create response id (aiClothesChanger, aiFaceEditor, aiGifGenerator, aiImageEditor, aiHeadshotGenerator, aiImageGenerator,
+    aiImageUpscaler, aiMemeGenerator, aiQrCodeGenerator, bodySwap, faceSwapPhoto, headSwap, imageBackgroundRemover,
+    photoColorizer)
+- from: AudioProject
+  relation: belongs_to
+  to: 2 audio generators
+  via: create response id (aiVoiceGenerator, aiVoiceCloner)
+- from: VideoProject
+  relation: has_many
+  to: Download
+  via: downloads[].url (expiring)
+- from: ImageProject
+  relation: has_many
+  to: Download
+  via: downloads[].url (expiring)
+- from: AudioProject
+  relation: has_many
+  to: Download
+  via: downloads[].url (expiring)
+- from: FaceDetection
+  relation: belongs_to
+  to: faceDetection.detectFaces
+  via: create response id; feeds face_mappings in faceSwap create calls
+- from: UploadedAsset
+  relation: has_many
+  to: generator inputs
+  via: file key passed in create request bodies

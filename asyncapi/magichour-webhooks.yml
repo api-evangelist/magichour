@@ -1,0 +1,34 @@
+name: Magic Hour webhook event catalog
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/integration/webhook/event-types.md and secure-handler.md
+asyncapi_published: false
+note: Magic Hour publishes no AsyncAPI document; this is the documented webhook surface. Events follow {project_type}.{status}
+  naming with a JSON payload of type + object. Delivery is signed.
+security:
+  signing: HMAC-SHA256
+  headers:
+  - name: magic-hour-event-signature
+    description: HMAC-SHA256 of the signed payload using the webhook secret
+  - name: magic-hour-event-timestamp
+    description: Unix timestamp signed with the payload to prevent replay
+events:
+- name: video.started
+  description: Video project began rendering
+- name: video.completed
+  description: Video render finished; downloads available
+- name: video.errored
+  description: Video project failed; payload carries error code and message
+- name: image.started
+  description: Image project began rendering
+- name: image.completed
+  description: Image render finished; downloads available
+- name: image.errored
+  description: Image project failed
+- name: audio.started
+  description: Audio project began rendering
+- name: audio.completed
+  description: Audio render finished; downloads available
+- name: audio.errored
+  description: Audio project failed
+docs: https://docs.magichour.ai/integration/webhook/overview

@@ -1,0 +1,19 @@
+name: Magic Hour agent skills
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/.well-known/agent-skills/magichour/skill.md
+skills:
+- file: skills/magichour-agent-skill.md
+  name: Magichour
+  method: searched
+  official: true
+  source: https://docs.magichour.ai/.well-known/agent-skills/magichour/skill.md
+  note: Provider-published Agent Skill, saved verbatim; referenced by the A2A agent card on docs.magichour.ai.
+- file: skills/magichour-generate-image.md
+  name: magichour-generate-image
+  method: generated
+  official: false
+- file: skills/magichour-generate-video.md
+  name: magichour-generate-video
+  method: generated
+  official: false

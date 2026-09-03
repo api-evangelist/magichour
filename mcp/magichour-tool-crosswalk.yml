@@ -1,0 +1,259 @@
+name: Magic Hour MCP tool ↔ OpenAPI operation crosswalk
+generated: '2026-09-03'
+method: derived
+source: mcp/magichour-mcp-tools.json (live tools/list from https://mcp.magichour.ai/, probed 2026-09-03) bound to
+  openapi/_original/magichour-openapi.json
+note: 'The hosted MCP server is built with FastMCP.from_openapi() over the same OpenAPI document (per magichourhq/magic-hour-mcp
+  README), so every one of the 36 REST operations has a generated tool; operationIds are normalized to snake_case
+  with get→retrieve renames. Eight additional tools are composite helpers (polling, upload, inline download) with
+  no single REST counterpart. Tool discovery is anonymous; tool CALLS require Authorization: Bearer <magic_hour_api_key>.'
+surfaces:
+  openapi: openapi/_original/magichour-openapi.json
+  mcp:
+    url: https://mcp.magichour.ai/
+    gated: tool calls require a Magic Hour API key; tools/list is public
+  mcp_docs:
+    url: https://docs.magichour.ai/mcp
+    gated: public; documentation search tools only
+coverage:
+  tools: 44
+  rest_operations: 36
+  mapped: 36
+  mcp_only: 8
+  rest_only: 0
+crosswalk:
+- tool: video_assets_generate_presigned_url
+  category: files
+  rest:
+  - videoAssets.generatePresignedUrl
+  binding: generated-from-openapi
+  confidence: high
+- tool: face_detection_retrieve_details
+  category: files
+  rest:
+  - faceDetection.getDetails
+  binding: generated-from-openapi
+  confidence: high
+- tool: face_detection_detect_faces
+  category: files
+  rest:
+  - faceDetection.detectFaces
+  binding: generated-from-openapi
+  confidence: high
+- tool: video_projects_retrieve_details
+  category: video
+  rest:
+  - videoProjects.getDetails
+  binding: generated-from-openapi
+  confidence: high
+- tool: video_projects_delete
+  category: video
+  rest:
+  - videoProjects.delete
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_talking_photo_create_talking_photo
+  category: video
+  rest:
+  - aiTalkingPhoto.createTalkingPhoto
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_video_editor_create_video
+  category: video
+  rest:
+  - aiVideoEditor.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: animation_create_video
+  category: video
+  rest:
+  - animation.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: audio_to_video_create_video
+  category: video
+  rest:
+  - audioToVideo.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: auto_subtitle_generator_create_video
+  category: video
+  rest:
+  - autoSubtitleGenerator.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: character_replace_create_video
+  category: video
+  rest:
+  - characterReplace.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: face_swap_create_video
+  category: video
+  rest:
+  - faceSwap.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: image_to_video_create_video
+  category: video
+  rest:
+  - imageToVideo.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: lip_sync_create_video
+  category: video
+  rest:
+  - lipSync.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: text_to_video_create_video
+  category: video
+  rest:
+  - textToVideo.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: video_to_video_create_video
+  category: video
+  rest:
+  - videoToVideo.createVideo
+  binding: generated-from-openapi
+  confidence: high
+- tool: image_projects_retrieve_details
+  category: image
+  rest:
+  - imageProjects.getDetails
+  binding: generated-from-openapi
+  confidence: high
+- tool: image_projects_delete
+  category: image
+  rest:
+  - imageProjects.delete
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_clothes_changer_create_image
+  category: image
+  rest:
+  - aiClothesChanger.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_face_editor_edit_image
+  category: image
+  rest:
+  - aiFaceEditor.editImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_gif_generator_create_image
+  category: image
+  rest:
+  - aiGifGenerator.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_image_editor_create_image
+  category: image
+  rest:
+  - aiImageEditor.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_headshot_generator_create_image
+  category: image
+  rest:
+  - aiHeadshotGenerator.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_image_generator_create_image
+  category: image
+  rest:
+  - aiImageGenerator.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_image_upscaler_create_image
+  category: image
+  rest:
+  - aiImageUpscaler.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_meme_generator_create_image
+  category: image
+  rest:
+  - aiMemeGenerator.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_qr_code_generator_create_image
+  category: image
+  rest:
+  - aiQrCodeGenerator.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: body_swap_create_image
+  category: image
+  rest:
+  - bodySwap.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: face_swap_photo_create_image
+  category: image
+  rest:
+  - faceSwapPhoto.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: head_swap_create_image
+  category: image
+  rest:
+  - headSwap.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: image_background_remover_create_image
+  category: image
+  rest:
+  - imageBackgroundRemover.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: photo_colorizer_create_image
+  category: image
+  rest:
+  - photoColorizer.createImage
+  binding: generated-from-openapi
+  confidence: high
+- tool: audio_projects_retrieve_details
+  category: audio
+  rest:
+  - audioProjects.getDetails
+  binding: generated-from-openapi
+  confidence: high
+- tool: audio_projects_delete
+  category: audio
+  rest:
+  - audioProjects.delete
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_voice_generator_create_audio
+  category: audio
+  rest:
+  - aiVoiceGenerator.createAudio
+  binding: generated-from-openapi
+  confidence: high
+- tool: ai_voice_cloner_create_audio
+  category: audio
+  rest:
+  - aiVoiceCloner.createAudio
+  binding: generated-from-openapi
+  confidence: high
+mcp_only:
+- tool: ping
+  reason: server health check, no REST counterpart
+- tool: wait_for_video_project
+  reason: composite polling helper over videoProjects.getDetails
+- tool: wait_for_image_project
+  reason: composite polling helper over imageProjects.getDetails
+- tool: wait_for_audio_project
+  reason: composite polling helper over audioProjects.getDetails
+- tool: upload_file_to_presigned_url
+  reason: uploads a local file to a presigned URL from videoAssets.generatePresignedUrl; the upload itself is not
+    an API operation
+- tool: fetch_image_download
+  reason: fetches a completed project downloads[n].url and returns inline media; not an API operation
+- tool: fetch_audio_download
+  reason: fetches a completed project downloads[n].url; not an API operation
+- tool: fetch_video_download
+  reason: fetches a completed project downloads[n].url; not an API operation
+rest_only: []

@@ -1,0 +1,19 @@
+generated: '2026-09-03'
+method: derived
+source: openapi/magichour-audio-projects-api-openapi.yml, openapi/magichour-files-api-openapi.yml,
+  openapi/magichour-image-projects-api-openapi.yml, openapi/magichour-video-projects-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Bearer authentication header of the form `Bearer <api_key>`, where `<api_key>`
+    is your API key. To get your API key, go to [Developer Hub](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference)
+    and click "Create new API Key".
+  sources:
+  - openapi/magichour-audio-projects-api-openapi.yml
+  - openapi/magichour-files-api-openapi.yml
+  - openapi/magichour-image-projects-api-openapi.yml
+  - openapi/magichour-video-projects-api-openapi.yml

@@ -1,0 +1,30 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Magic Hour files API
+  version: 1.0.0
+extends: openapi/magichour-files-api-openapi.yml
+x-provenance:
+  generated: '2026-09-03'
+  method: generated
+  source: Derived from Magic Hour docs (support contact, webhook and error references); applies non-destructively
+    over the refined spec.
+actions:
+- target: $.info
+  update:
+    contact:
+      name: Magic Hour Support
+      email: support@magichour.ai
+      url: https://discord.gg/JX5rgsZaJp
+  description: Add the support contact published in the docs (support@magichour.ai; Discord community).
+- target: $
+  update:
+    externalDocs:
+      description: Magic Hour API documentation
+      url: https://docs.magichour.ai
+  description: Point at the developer documentation host.
+- target: $.info
+  update:
+    x-error-envelope: 'All 4xx responses return {"message": string} application/json; see errors/magichour-problem-types.yml'
+    x-async-pattern: Creates return {id, credits_charged} immediately; poll the matching *-projects/{id} operation
+      or subscribe to signed webhooks (asyncapi/magichour-webhooks.yml).
+  description: Record cross-cutting semantics captured during enrichment.

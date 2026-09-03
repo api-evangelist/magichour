@@ -1,0 +1,31 @@
+name: Magic Hour A2A agent card
+generated: '2026-09-03'
+method: probed
+source: https://docs.magichour.ai/.well-known/agent-card.json
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: docs.magichour.ai
+x-evidence:
+  fetched: '2026-09-03'
+  url: https://docs.magichour.ai/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+card_file: a2a/magichour-agent-card.json
+grade: conformant
+grade_basis: capabilities is an object, protocolVersion is present, skills is an array; preferredTransport, defaultInputModes
+  and defaultOutputModes all present.
+deviations:
+- protocolVersion declares "0.3" (a pre-1.0 A2A protocol revision), not 1.0.0
+- provider.organization reads "Magic Hour API Docs" rather than the company name
+- skills[0].tags is an empty array
+summary:
+  name: Magic Hour API Docs
+  version: 1.0.0
+  protocolVersion: '0.3'
+  preferredTransport: HTTP+JSON
+  skills:
+  - id: magichour
+    url: https://docs.magichour.ai/.well-known/agent-skills/magichour/skill.md
+note: The card is served by the docs host and points at a provider-published Agent Skill at /.well-known/agent-skills/magichour/skill.md
+  (saved under skills/). Capabilities declare no streaming or push notifications.

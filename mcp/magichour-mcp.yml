@@ -1,0 +1,40 @@
+name: Magic Hour MCP servers
+generated: '2026-09-03'
+method: probed
+source: https://mcp.magichour.ai/.well-known/mcp/server-card.json and a live anonymous tools/list POST to https://mcp.magichour.ai/
+  on 2026-09-03; docs server from https://docs.magichour.ai/integration/model-context-protocol.md
+status: official
+deployment:
+  mode: remote
+  endpoint: https://mcp.magichour.ai/
+  auth: api-key
+  verified: probed
+servers:
+- name: magic-hour
+  role: api
+  endpoint: https://mcp.magichour.ai/
+  transport: streamable-http
+  tools: 44
+  tools_file: mcp/magichour-mcp-tools.json
+  server_card: mcp/magichour-mcp-server-card.json
+  auth:
+    scheme: bearer
+    detail: 'tools/list answers anonymously (probed 200); tool calls require Authorization: Bearer <magic_hour_api_key>.
+      An OAuth shim publishes RFC 8414 authorization-server metadata and an oauth-protected-resource document on
+      the same host (saved under well-known/) with dynamic client registration at /register; the access token is
+      the Magic Hour API key.'
+  source_code: https://github.com/magichourhq/magic-hour-mcp
+  note: 'FastMCP server generated from the same OpenAPI document, plus composite helpers: wait_for_*_project polling,
+    upload_file_to_presigned_url, and fetch_*_download inline media tools. The server card at /.well-known/mcp/server-card.json
+    carries all 44 tools with input/output schemas. Endpoint is the host ROOT — /mcp on this host 404s.'
+- name: Magic Hour API Docs
+  role: documentation
+  endpoint: https://docs.magichour.ai/mcp
+  transport: streamable-http
+  tools: 2
+  auth:
+    scheme: none
+    detail: anonymous; probed 200 on tools/list
+  note: Mintlify-hosted docs MCP server with search_magic_hour_api_docs and query_docs_filesystem_magic_hour_api_docs
+    tools over the documentation and OpenAPI spec. Public landing/setup page at https://magichour.ai/mcp (added
+    2026-08-21 per changelog).

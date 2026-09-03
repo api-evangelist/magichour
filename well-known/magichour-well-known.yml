@@ -1,0 +1,100 @@
+name: Magic Hour well-known discovery documents
+generated: '2026-09-03'
+method: probed
+source: Probed /.well-known/* on magichour.ai, www.magichour.ai, api.magichour.ai, docs.magichour.ai and mcp.magichour.ai
+  on 2026-09-03
+note: 'Real hits live on the MCP host: mcp.magichour.ai serves RFC 8414 OAuth authorization-server metadata, an
+  OAuth protected-resource document, and an MCP server card at /.well-known/mcp/server-card.json (44 tools). docs.magichour.ai
+  serves an A2A agent card at /.well-known/agent-card.json (saved under a2a/). No security.txt, openid-configuration
+  or api-catalog anywhere; magichour.ai 404s return an HTML app shell, api.magichour.ai 404s return JSON.'
+hosts:
+- host: magichour.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: www.magichour.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: api.magichour.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+- host: docs.magichour.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: a2a/magichour-agent-card.json
+    note: A2A agent card, saved verbatim under a2a/
+  - path: /.well-known/agent.json
+    status: 404
+- host: mcp.magichour.ai
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: well-known/magichour-mcp-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: well-known/magichour-mcp-oauth-protected-resource.json
+  - path: /.well-known/mcp/server-card.json
+    status: 200
+    file: mcp/magichour-mcp-server-card.json
+    note: MCP server card naming all 44 tools with schemas
+  - path: /.well-known/security.txt
+    status: 401
+  - path: /.well-known/agent-card.json
+    status: 401

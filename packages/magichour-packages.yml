@@ -1,0 +1,39 @@
+name: Magic Hour client packages
+generated: '2026-09-03'
+method: searched
+source: registry.npmjs.org, pypi.org, crates.io, proxy.golang.org and github.com/magichourhq, checked 2026-09-03
+note: Four first-party SDKs, all released 2026-09-02 — actively maintained in lockstep with the API. RubyGems has
+  no magic_hour gem (checked, 404). SDKs ship a built-in mock-server environment for credit-free testing (see sandbox/).
+packages:
+- name: magic-hour
+  registry: npm
+  language: JavaScript/TypeScript
+  official: true
+  version: 0.73.0
+  published: '2026-09-02'
+  url: https://www.npmjs.com/package/magic-hour
+  source_code: https://github.com/magichourhq/magic-hour-node
+- name: magic_hour
+  registry: pypi
+  language: Python
+  official: true
+  version: 0.77.0
+  published: '2026-09-02'
+  url: https://pypi.org/project/magic_hour/
+  source_code: https://github.com/magichourhq/magic-hour-python
+- name: magic_hour
+  registry: crates.io
+  language: Rust
+  official: true
+  version: 0.69.0
+  published: '2026-09-02'
+  url: https://crates.io/crates/magic_hour
+  source_code: https://github.com/magichourhq/magic-hour-rust
+- name: github.com/magichourhq/magic-hour-go
+  registry: go
+  language: Go
+  official: true
+  version: v0.76.0
+  published: '2026-09-02'
+  url: https://pkg.go.dev/github.com/magichourhq/magic-hour-go
+  source_code: https://github.com/magichourhq/magic-hour-go

@@ -1,0 +1,24 @@
+name: Magic Hour mock server / testing environment
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/integration/development-and-testing.md
+model: SDK-built-in mock server
+environments:
+- name: production
+  base_url: https://api.magichour.ai
+  sdk_constant: Environment.ENVIRONMENT (Python) / Environment.Environment (Node)
+- name: mock
+  base_url: https://api.sideko.dev/v1/mock/magichour/magic-hour/latest
+  sdk_constant: Environment.MOCK_SERVER (Python) / Environment.MockServer (Node)
+  note: Mock base URL published in the magichourhq/magic-hour-mcp README as the MAGIC_HOUR_API_BASE_URL override;
+    the SDK constants select it without exposing the URL.
+characteristics:
+- No credit consumption
+- Any token value accepted in mock mode
+- Instant responses with realistic sample data
+- Recommended for unit/integration tests, CI/CD, local development and prototyping
+test_credentials:
+  note: No test-vs-live key prefixes exist; live keys use the mhk_live_ prefix and mock mode accepts any value.
+    No test cards or fixture triggers (not a payments API).
+note: The provider also recommends low-cost live smoke tests (e.g. 480p, short durations) before production; webhook
+  testing is walked through end-to-end in the webhook quickstart.

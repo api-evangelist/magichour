@@ -1,0 +1,61 @@
+name: Magic Hour API error catalog
+generated: '2026-09-03'
+method: derived
+source: openapi/_original/magichour-openapi.json 4xx responses, enriched from https://docs.magichour.ai/get-started/quick-start.md
+  HTTP error table
+format: proprietary-json
+envelope: '{ "message": string } — application/json, not RFC 9457 problem+json'
+errors:
+- status: 400
+  title: Bad Request
+  detail: The response message names the invalid or missing field
+  remediation: Fix the named field and resubmit
+  in_spec: true
+- status: 401
+  title: Unauthorized
+  detail: Request not properly authenticated
+  remediation: 'Verify the API key and send it as Authorization: Bearer <key>'
+  in_spec: true
+- status: 402
+  title: Payment Required
+  detail: Insufficient credits
+  remediation: Add credits at magichour.ai/dashboard/my-plan
+  in_spec: true
+- status: 403
+  title: Forbidden
+  detail: Key valid but the model, resolution, or feature is not available on the current plan
+  remediation: Upgrade the plan or lower the requested resolution/model
+  in_spec: false
+- status: 404
+  title: Not Found
+  detail: Requested resource not found
+  remediation: Check the project id
+  in_spec: true
+- status: 422
+  title: Unprocessable Entity
+  detail: Input validation failed; message lists the allowed values (e.g. valid audio extensions)
+  remediation: Correct the input format
+  in_spec: true
+- status: 429
+  title: Too Many Requests
+  detail: Requests sent too quickly
+  remediation: Retry with exponential backoff
+  in_spec: false
+- status: 500
+  title: Internal Server Error
+  detail: Temporary server issue
+  remediation: Retry after a few seconds
+  in_spec: false
+- status: 502
+  title: Bad Gateway
+  detail: Server temporarily unavailable
+  remediation: Retry after 30-60 seconds; if it failed before returning a project id, no job was created — resubmit
+  in_spec: false
+- status: 503
+  title: Service Unavailable
+  detail: Server overloaded
+  remediation: Retry with exponential backoff
+  in_spec: false
+note: The OpenAPI declares 400/401/402/404/422 on every operation with a consistent {message} envelope; 403/429/5xx
+  are documented in the quick-start error table only. Webhook delivery failures are surfaced separately via *.errored
+  events.

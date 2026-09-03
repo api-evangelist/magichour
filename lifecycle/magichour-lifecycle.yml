@@ -1,0 +1,25 @@
+name: Magic Hour API lifecycle
+generated: '2026-09-03'
+method: searched
+source: https://status.magichour.ai, https://docs.magichour.ai/changelog, openapi/_original/magichour-openapi.json
+versioning:
+  scheme: URL path
+  current: v1
+  note: All 36 operations live under /v1/; the OpenAPI info.version is the label "beta". SDKs version independently
+    by semver (0.69–0.77 as of 2026-09-02).
+status_page:
+  url: https://status.magichour.ai
+  probed: 200
+  checked: '2026-09-03'
+changelog:
+  url: https://docs.magichour.ai/changelog
+  artifact: changelog/magichour-changelog.yml
+deprecation_policy:
+  published: false
+  note: No deprecation or sunset policy page found; no deprecated:true operations in the OpenAPI; no Sunset/Deprecation
+    header documented.
+sla:
+  published: false
+  note: No SLA page found; observed median processing times are published at https://docs.magichour.ai/api-reference/processing-times
+    instead.
+deprecated_operations: []

@@ -1,0 +1,84 @@
+name: Magic Hour changelog
+generated: '2026-09-03'
+method: searched
+source: https://docs.magichour.ai/changelog.md
+scheme: dated updates (no semver for the API; yearly archive pages back to 2023)
+url: https://docs.magichour.ai/changelog
+archives:
+- https://docs.magichour.ai/changelog/2025
+- https://docs.magichour.ai/changelog/2024
+- https://docs.magichour.ai/changelog/2023
+current_api_version: v1 (beta)
+note: Entries are tagged Web App / API. Recent window below; 129 dated 2026 entries on the current page. Breaking
+  changes are not separately flagged in the changelog format.
+entries:
+- date: '2026-08-25'
+  tags:
+  - Web App
+  highlights:
+  - Reference Uploaded Images More Easily
+  - Continue Editing Video Outputs
+  - AI Avatar Generator Is Now Live
+- date: '2026-08-21'
+  tags:
+  - Web App
+  highlights:
+  - New Character Animate Free Tool
+  - New Magic Hour MCP Setup Page
+- date: '2026-08-20'
+  tags:
+  - Web App
+  highlights:
+  - Translate Videos in the Create Flow
+- date: '2026-08-17'
+  tags:
+  - Web App
+  highlights:
+  - LTX-2.3 Now Available for UGC Generation
+- date: '2026-08-14'
+  tags:
+  - Web App
+  highlights:
+  - Create Free AI UGC Ads with LTX 2.3
+- date: '2026-08-13'
+  tags:
+  - Web App
+  highlights:
+  - Add Audio References to LTX 2.3 Video Generation
+  - Control Voice Speed Across Audio Tools
+  - Use References with End Frames in Image-to-Video
+  - Add Characters to More Creation Modes
+- date: '2026-08-10'
+  tags:
+  - API
+  - Web App
+  highlights:
+  - Added Kling 2.6 for Text-to-Video and Image-to-Video
+- date: '2026-08-09'
+  tags:
+  - Web App
+  highlights:
+  - New Photo, Face, and Skin Enhancer Tools
+- date: '2026-08-08'
+  tags:
+  - Web App
+  highlights:
+  - Added Seedance 2.5 for Video Generation
+  - Create AI Music Videos
+- date: '2026-08-07'
+  tags:
+  - Web App
+  highlights:
+  - Start Character and Moodboard Creation with Drag and Drop
+- date: '2026-08-04'
+  tags:
+  - Web App
+  highlights:
+  - Build Photorealistic AI Influencers from Traits
+  - New AI Avatar Generator Product Page
+  - Use Photo, Face, and Skin Enhancers from Their Product Pages
+- date: '2026-08-01'
+  tags:
+  - Web App
+  highlights:
+  - Improved LTX 2.3 in Audio-to-Video
