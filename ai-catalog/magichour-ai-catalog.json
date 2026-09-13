@@ -1,0 +1,42 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Magic Hour",
+    "identifier": "magichour.ai",
+    "documentationUrl": "https://docs.magichour.ai/",
+    "logoUrl": "https://magichour.ai/logo.svg"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:magichour.ai:api:v1",
+      "displayName": "Magic Hour API",
+      "type": "application/openapi+json",
+      "url": "https://magichour.ai/docs/api/openapi.json",
+      "description": "Create and manage AI-generated video, image, and audio projects with the Magic Hour API.",
+      "tags": [
+        "video-generation",
+        "image-generation",
+        "audio-generation",
+        "media-editing"
+      ],
+      "representativeQueries": [
+        "generate a video from a text prompt",
+        "animate an image into a video",
+        "generate an image from a text prompt",
+        "create subtitles for a video"
+      ],
+      "metadata": {
+        "sdk.python.repositoryUrl": "https://github.com/magichourhq/magic-hour-python",
+        "sdk.python.packageUrl": "https://pypi.org/project/magic_hour/",
+        "sdk.python.installCommand": "pip install magic_hour",
+        "sdk.node.repositoryUrl": "https://github.com/magichourhq/magic-hour-node",
+        "sdk.node.packageUrl": "https://www.npmjs.com/package/magic-hour",
+        "sdk.node.installCommand": "npm install magic-hour",
+        "sdk.go.repositoryUrl": "https://github.com/magichourhq/magic-hour-go",
+        "sdk.go.installCommand": "go get -u github.com/magichourhq/magic-hour-go",
+        "sdk.rust.repositoryUrl": "https://github.com/magichourhq/magic-hour-rust",
+        "sdk.rust.installCommand": "cargo add magic_hour"
+      }
+    }
+  ]
+}
