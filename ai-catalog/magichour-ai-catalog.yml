@@ -34,6 +34,7 @@ conformance:
     informational:
     - '[Magic Hour API] Media type ''application/openapi+json'' is a valid application extension media
       type. ARD permits extension types without core registration.'
+  did_web: null
 catalog:
   host_display_name: Magic Hour
   host_identifier: magichour.ai
