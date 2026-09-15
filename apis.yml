@@ -32,7 +32,7 @@ tags:
 - Audio
 - Generative AI
 - Voice Cloning
-- Text-To-Video
+- Text-to-Video
 tags_raw:
 - ai video
 - image generation
@@ -190,6 +190,8 @@ common:
   url: https://magichour.ai/privacy-policy
 - type: Login
   url: https://magichour.ai/developer
+- type: Support
+  url: mailto:support@magichour.ai
 maintainers:
 - FN: Magic Hour
   email: runbo@magichour.ai
