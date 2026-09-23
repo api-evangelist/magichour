@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Magic Hour Audio Projects API
   version: beta
-  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  description: Magic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI.
   termsOfService: https://magichour.ai/terms-of-service
 servers:
 - url: https://api.magichour.ai
@@ -12,7 +12,22 @@ tags:
 paths:
   /v1/audio-projects/{id}:
     get:
-      description: "Check the progress of a audio project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n- `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n- `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+      description: 'Check the progress of a audio project. The `downloads` field is populated after a successful render.
+
+
+        **Statuses**
+
+        - `queued` — waiting to start
+
+        - `rendering` — in progress
+
+        - `complete` — ready; see `downloads`
+
+        - `error` — a failure occurred (see `error`)
+
+        - `canceled` — user canceled
+
+        - `draft` — not used'
       summary: Get audio details
       tags:
       - Audio Projects
@@ -972,7 +987,11 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/ai-voice-generator\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Voice Generator audio\\\",\\\"style\\\":{\\\"prompt\\\":\\\"Hello, how are you?\\\",\\\"voice_name\\\":\\\"Elon Musk\\\"}}\")\n  .asString();"
   /v1/ai-voice-cloner:
     post:
-      description: "Clone a voice from an audio sample and generate speech. \n* Each character costs 0.1 credits. \n* The cost is rounded up to the nearest whole number"
+      description: 'Clone a voice from an audio sample and generate speech.
+
+        * Each character costs 0.1 credits.
+
+        * The cost is rounded up to the nearest whole number'
       summary: AI Voice Cloner
       tags:
       - Audio Projects

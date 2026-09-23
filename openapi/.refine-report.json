@@ -1,7 +1,7 @@
 {
   "provider": "magichour",
   "sources": [
-    "magichour-api-openapi.yml"
+    "_original/magichour-api-openapi.yml"
   ],
   "outputs": [
     "magichour-audio-projects-api-openapi.yml",
@@ -9,14 +9,20 @@
     "magichour-image-projects-api-openapi.yml",
     "magichour-video-projects-api-openapi.yml"
   ],
-  "archived": [
-    "archived openapi/magichour-api-openapi.yml"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "magichour-api-openapi.yml: upgraded openapi 3.0.2 -> OpenAPI 3.2.0",
-    "apis.yml register: written (+4 apis, 4 total)"
+    "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "_original/magichour-openapi.json: archived document superseded by a larger archived document",
+    "magichour-audio-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "magichour-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "magichour-image-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "magichour-video-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

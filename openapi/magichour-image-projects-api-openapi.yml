@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Magic Hour Image Projects API
   version: beta
-  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  description: Magic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI.
   termsOfService: https://magichour.ai/terms-of-service
 servers:
 - url: https://api.magichour.ai
@@ -12,7 +12,22 @@ tags:
 paths:
   /v1/image-projects/{id}:
     get:
-      description: "Check the progress of a image project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n- `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n- `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+      description: 'Check the progress of a image project. The `downloads` field is populated after a successful render.
+
+
+        **Statuses**
+
+        - `queued` — waiting to start
+
+        - `rendering` — in progress
+
+        - `complete` — ready; see `downloads`
+
+        - `error` — a failure occurred (see `error`)
+
+        - `canceled` — user canceled
+
+        - `draft` — not used'
       summary: Get image details
       tags:
       - Image Projects
@@ -509,7 +524,7 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/ai-clothes-changer\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Clothes Changer image\\\",\\\"assets\\\":{\\\"person_file_path\\\":\\\"api-assets/id/model.png\\\",\\\"garment_file_path\\\":\\\"api-assets/id/outfit.png\\\",\\\"garment_type\\\":\\\"entire_outfit\\\"}}\")\n  .asString();"
   /v1/ai-face-editor:
     post:
-      description: Edit facial features of an image using AI. Each edit costs 1 frame. The height/width of the output image depends on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page for more details
+      description: Edit facial features of an image using AI. Each edit costs 1 frame. The height/width of the output image depends on your subscription. Please refer to our pricing page for more details
       summary: AI Face Editor
       tags:
       - Image Projects
@@ -2286,7 +2301,7 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/body-swap\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Body Swap image\\\",\\\"resolution\\\":\\\"1k\\\",\\\"assets\\\":{\\\"person_file_path\\\":\\\"api-assets/id/1234.png\\\",\\\"scene_file_path\\\":\\\"api-assets/id/5678.png\\\"}}\")\n  .asString();"
   /v1/face-swap-photo:
     post:
-      description: Create a face swap photo. Each photo costs 10 credits. The height/width of the output image depends on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page for more details
+      description: Create a face swap photo. Each photo costs 10 credits. The height/width of the output image depends on your subscription. Please refer to our pricing page for more details
       summary: Face Swap Photo
       tags:
       - Image Projects

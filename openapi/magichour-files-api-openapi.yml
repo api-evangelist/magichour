@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Magic Hour Files API
   version: beta
-  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  description: Magic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI.
   termsOfService: https://magichour.ai/terms-of-service
 servers:
 - url: https://api.magichour.ai
@@ -12,7 +12,39 @@ tags:
 paths:
   /v1/files/upload-urls:
     post:
-      description: "Generates a list of pre-signed upload URLs for the assets required. This API is only necessary if you want to upload to Magic Hour's storage. Refer to the [Input Files Guide](https://docs.magichour.ai/integration/inputs-and-outputs) for more details.\n\nThe response array will match the order of items in the request body.\n\n**Valid file extensions per asset type**:\n- video: mp4, m4v, mov, webm\n- audio: mp3, wav, aac, flac, webm, weba, m4a, opus, ogg, oga, aiff, amr\n- image: png, jpg, jpeg, jfif, heic, heif, webp, avif, jp2, tiff, tif, bmp\n- gif: gif, webp, webm\n\n> Note: `gif` is only supported for face swap API `video_file_path` field.\n\nOnce you receive an upload URL, send a `PUT` request to upload the file directly.\n\nExample:\n\n```\ncurl -X PUT --data '@/path/to/file/video.mp4' \\\n  https://videos.magichour.ai/api-assets/id/video.mp4?<auth params from the API response>\n```\n"
+      description: 'Generates a list of pre-signed upload URLs for the assets required. This API is only necessary if you want to upload to Magic Hour''s storage. Refer to the Input Files Guide for more details.
+
+
+        The response array will match the order of items in the request body.
+
+
+        **Valid file extensions per asset type**:
+
+        - video: mp4, m4v, mov, webm
+
+        - audio: mp3, wav, aac, flac, webm, weba, m4a, opus, ogg, oga, aiff, amr
+
+        - image: png, jpg, jpeg, jfif, heic, heif, webp, avif, jp2, tiff, tif, bmp
+
+        - gif: gif, webp, webm
+
+
+        > Note: `gif` is only supported for face swap API `video_file_path` field.
+
+
+        Once you receive an upload URL, send a `PUT` request to upload the file directly.
+
+
+        Example:
+
+
+        ```
+
+        curl -X PUT --data ''@/path/to/file/video.mp4'' \
+
+        https://videos.magichour.ai/api-assets/id/video.mp4?
+
+        ```'
       summary: Generate asset upload urls
       tags:
       - Files
@@ -190,7 +222,10 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/files/upload-urls\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"items\\\":[{\\\"type\\\":\\\"video\\\",\\\"extension\\\":\\\"mp4\\\"},{\\\"type\\\":\\\"audio\\\",\\\"extension\\\":\\\"mp3\\\"}]}\")\n  .asString();"
   /v1/face-detection/{id}:
     get:
-      description: "Get the details of a face detection task. \n\nUse this API to get the list of faces detected in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo) or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API calls for multi-face swaps."
+      description: 'Get the details of a face detection task.
+
+
+        Use this API to get the list of faces detected in the image or video to use in the face swap photo or face swap video API calls for multi-face swaps.'
       summary: Get face detection details
       tags:
       - Files
@@ -357,7 +392,13 @@ paths:
         source: "HttpResponse<String> response = Unirest.get(\"https://api.magichour.ai/v1/face-detection/id\")\n  .header(\"accept\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .asString();"
   /v1/face-detection:
     post:
-      description: "Detect faces in an image or video. \n      \nUse this API to get the list of faces detected in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo) or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API calls for multi-face swaps.\n\nNote: Face detection is free to use for the near future. Pricing may change in the future."
+      description: 'Detect faces in an image or video.
+
+
+        Use this API to get the list of faces detected in the image or video to use in the face swap photo or face swap video API calls for multi-face swaps.
+
+
+        Note: Face detection is free to use for the near future. Pricing may change in the future.'
       summary: Face Detection
       tags:
       - Files

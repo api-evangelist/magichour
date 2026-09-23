@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Magic Hour Video Projects API
   version: beta
-  description: "\nMagic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI. \n\nWebhook documentation can be found [here](https://docs.magichour.ai/webhook-reference).\n\nIf you have any questions, please reach out to us via [discord](https://discord.gg/JX5rgsZaJp).\n\n# Authentication\n\nEvery request requires an API key.\n\nTo get started, first generate your API key [here](https://magichour.ai/developer?tab=api-keys&utm_source=docs&utm_medium=referral&utm_campaign=api-reference).\n\nThen, add the `Authorization` header to the request.\n\n| Key | Value |\n|-|-|\n| Authorization | Bearer mhk_live_apikey |\n\n> **Warning**: any API call that renders a video will utilize credits in your account.\n"
+  description: Magic Hour provides an API (beta) that can be integrated into your own application to generate videos and images using AI.
   termsOfService: https://magichour.ai/terms-of-service
 servers:
 - url: https://api.magichour.ai
@@ -12,7 +12,22 @@ tags:
 paths:
   /v1/video-projects/{id}:
     get:
-      description: "Check the progress of a video project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n- `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n- `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+      description: 'Check the progress of a video project. The `downloads` field is populated after a successful render.
+
+
+        **Statuses**
+
+        - `queued` — waiting to start
+
+        - `rendering` — in progress
+
+        - `complete` — ready; see `downloads`
+
+        - `error` — a failure occurred (see `error`)
+
+        - `canceled` — user canceled
+
+        - `draft` — not used'
       summary: Get video details
       tags:
       - Video Projects
@@ -593,7 +608,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/ai-talking-photo\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Talking Photo image\\\",\\\"start_seconds\\\":0,\\\"end_seconds\\\":15,\\\"assets\\\":{\\\"image_file_path\\\":\\\"api-assets/id/1234.png\\\",\\\"audio_file_path\\\":\\\"api-assets/id/1234.mp3\\\"},\\\"style\\\":{\\\"generation_mode\\\":\\\"realistic\\\",\\\"prompt\\\":\\\"string\\\"},\\\"max_resolution\\\":1024}\")\n  .asString();"
   /v1/ai-video-editor:
     post:
-      description: "**What this API does**\n\nCreate the same Video Editor you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding video editor into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a video editor job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/ai-video-editor)."
+      description: '**What this API does**
+
+
+        Create the same Video Editor you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding video editor into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a video editor job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: AI Video Editor
       tags:
       - Video Projects
@@ -1137,7 +1188,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/animation\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Animation video\\\",\\\"fps\\\":12,\\\"end_seconds\\\":15,\\\"height\\\":960,\\\"width\\\":512,\\\"style\\\":{\\\"art_style\\\":\\\"Painterly Illustration\\\",\\\"art_style_custom\\\":\\\"string\\\",\\\"camera_effect\\\":\\\"Simple Zoom In\\\",\\\"prompt_type\\\":\\\"custom\\\",\\\"prompt\\\":\\\"Cyberpunk city\\\",\\\"transition_speed\\\":5},\\\"assets\\\":{\\\"audio_source\\\":\\\"file\\\",\\\"audio_file_path\\\":\\\"api-assets/id/1234.mp3\\\",\\\"youtube_url\\\":\\\"string\\\",\\\"image_file_path\\\":\\\"api-assets/id/1234.png\\\"}}\")\n  .asString();"
   /v1/audio-to-video:
     post:
-      description: "**What this API does**\n\nCreate the same Audio To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding audio to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a audio to video job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/audio-to-video)."
+      description: '**What this API does**
+
+
+        Create the same Audio To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding audio to video into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a audio to video job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Audio-to-Video
       tags:
       - Video Projects
@@ -1554,7 +1641,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/auto-subtitle-generator\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Auto Subtitle video\\\",\\\"start_seconds\\\":0,\\\"end_seconds\\\":15,\\\"assets\\\":{\\\"video_file_path\\\":\\\"api-assets/id/1234.mp4\\\"},\\\"style\\\":{\\\"template\\\":\\\"karaoke\\\",\\\"custom_config\\\":{\\\"font\\\":\\\"Noto Sans\\\",\\\"font_size\\\":24,\\\"font_style\\\":\\\"normal\\\",\\\"text_color\\\":\\\"#FFFFFF\\\",\\\"highlighted_text_color\\\":\\\"#FFD700\\\",\\\"stroke_color\\\":\\\"#000000\\\",\\\"stroke_width\\\":1,\\\"vertical_position\\\":\\\"bottom\\\",\\\"horizontal_position\\\":\\\"center\\\"}}}\")\n  .asString();"
   /v1/character-replace:
     post:
-      description: "**What this API does**\n\nCreate the same Character Replace you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding character replace into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a character replace job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/character-replace)."
+      description: '**What this API does**
+
+
+        Create the same Character Replace you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding character replace into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a character replace job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Character Replace
       tags:
       - Video Projects
@@ -1790,7 +1913,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/character-replace\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Character Replace video\\\",\\\"start_seconds\\\":0,\\\"end_seconds\\\":15,\\\"resolution\\\":\\\"720p\\\",\\\"assets\\\":{\\\"video_file_path\\\":\\\"api-assets/id/1234.mp4\\\",\\\"image_file_path\\\":\\\"api-assets/id/5678.png\\\"},\\\"style\\\":{\\\"mode\\\":\\\"replace\\\",\\\"selection_mode\\\":\\\"auto\\\"}}\")\n  .asString();"
   /v1/face-swap:
     post:
-      description: "**What this API does**\n\nCreate the same Face Swap you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding face swap into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a face swap job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/face-swap)."
+      description: '**What this API does**
+
+
+        Create the same Face Swap you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding face swap into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a face swap job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Face Swap Video
       tags:
       - Video Projects
@@ -2048,7 +2207,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/face-swap\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Face Swap video\\\",\\\"start_seconds\\\":0,\\\"end_seconds\\\":15,\\\"style\\\":{\\\"version\\\":\\\"default\\\"},\\\"assets\\\":{\\\"face_swap_mode\\\":\\\"all-faces\\\",\\\"image_file_path\\\":\\\"image/id/1234.png\\\",\\\"face_mappings\\\":[{\\\"original_face\\\":\\\"api-assets/id/0-0.png\\\",\\\"new_face\\\":\\\"api-assets/id/1234.png\\\"}],\\\"video_source\\\":\\\"file\\\",\\\"video_file_path\\\":\\\"api-assets/id/1234.mp4\\\",\\\"youtube_url\\\":\\\"string\\\"}}\")\n  .asString();"
   /v1/image-to-video:
     post:
-      description: "**What this API does**\n\nCreate the same Image To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding image to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a image to video job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/image-to-video)."
+      description: '**What this API does**
+
+
+        Create the same Image To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding image to video into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a image to video job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Image-to-Video
       tags:
       - Video Projects
@@ -2400,7 +2595,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/image-to-video\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Image To Video video\\\",\\\"end_seconds\\\":5,\\\"model\\\":\\\"kling-3.0\\\",\\\"resolution\\\":\\\"720p\\\",\\\"audio\\\":true,\\\"style\\\":{\\\"prompt\\\":\\\"a dog running\\\"},\\\"assets\\\":{\\\"image_file_path\\\":\\\"api-assets/id/1234.png\\\",\\\"end_image_file_path\\\":\\\"api-assets/id/1234.png\\\"}}\")\n  .asString();"
   /v1/lip-sync:
     post:
-      description: "**What this API does**\n\nCreate the same Lip Sync you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding lip sync into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a lip sync job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/lip-sync)."
+      description: '**What this API does**
+
+
+        Create the same Lip Sync you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding lip sync into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a lip sync job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Lip Sync
       tags:
       - Video Projects
@@ -2610,7 +2841,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/lip-sync\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Lip Sync video\\\",\\\"start_seconds\\\":0,\\\"end_seconds\\\":15,\\\"max_fps_limit\\\":12,\\\"assets\\\":{\\\"audio_file_path\\\":\\\"api-assets/id/1234.mp3\\\",\\\"video_source\\\":\\\"file\\\",\\\"video_file_path\\\":\\\"api-assets/id/1234.mp4\\\",\\\"youtube_url\\\":\\\"string\\\"},\\\"style\\\":{\\\"generation_mode\\\":\\\"lite\\\"}}\")\n  .asString();"
   /v1/text-to-video:
     post:
-      description: "**What this API does**\n\nCreate the same Text To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding text to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a text to video job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/text-to-video)."
+      description: '**What this API does**
+
+
+        Create the same Text To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding text to video into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a text to video job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Text-to-Video
       tags:
       - Video Projects
@@ -2948,7 +3215,43 @@ paths:
         source: "HttpResponse<String> response = Unirest.post(\"https://api.magichour.ai/v1/text-to-video\")\n  .header(\"accept\", \"application/json\")\n  .header(\"content-type\", \"application/json\")\n  .header(\"authorization\", \"Bearer <token>\")\n  .body(\"{\\\"name\\\":\\\"My Text To Video video\\\",\\\"end_seconds\\\":5,\\\"aspect_ratio\\\":\\\"16:9\\\",\\\"resolution\\\":\\\"720p\\\",\\\"model\\\":\\\"kling-3.0\\\",\\\"audio\\\":true,\\\"style\\\":{\\\"prompt\\\":\\\"a dog running\\\"}}\")\n  .asString();"
   /v1/video-to-video:
     post:
-      description: "**What this API does**\n\nCreate the same Video To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding video to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls) and copy the `file_path`.  \n2) Send a request to create a video to video job with the basic fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n**Key options**\n- Inputs: see the request schema for endpoint-specific assets  \n- Resolution: free users default to 480p; higher plans unlock HD and larger sizes  \n- Extra fields: see the request schema for endpoint-specific options  \n\n**Cost**  \nCredits are only charged for the frames that actually render. You'll see an estimate when the job is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/video-to-video)."
+      description: '**What this API does**
+
+
+        Create the same Video To Video you can make in the browser, but programmatically, so you can automate it, run it at scale, or connect it to your own app or workflow.
+
+
+        **Good for**
+
+        - Automation and batch processing
+
+        - Adding video to video into apps, pipelines, or tools
+
+
+        **How it works (3 steps)**
+
+        1) Upload your inputs (video, image, or audio) with Generate Upload URLs and copy the `file_path`.
+
+        2) Send a request to create a video to video job with the basic fields.
+
+        3) Check the job status until it''s `complete`, then download the result from `downloads`.
+
+
+        **Key options**
+
+        - Inputs: see the request schema for endpoint-specific assets
+
+        - Resolution: free users default to 480p; higher plans unlock HD and larger sizes
+
+        - Extra fields: see the request schema for endpoint-specific options
+
+
+        **Cost**
+
+        Credits are only charged for the frames that actually render. You''ll see an estimate when the job is queued, and the final total after it''s done.
+
+
+        For detailed examples, see the product page.'
       summary: Video-to-Video
       tags:
       - Video Projects
