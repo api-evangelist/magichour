@@ -28,11 +28,12 @@ image: https://magichour.ai/logo-social.png
 specificationVersion: '0.23'
 tags:
 - AI Video
-- Image-Generation
+- Image Generation
 - Audio
 - Generative AI
 - Voice Cloning
 - Text-to-Video
+- A2A
 tags_raw:
 - ai video
 - image generation
@@ -40,6 +41,8 @@ tags_raw:
 - generative ai
 - voice cloning
 - text to video
+- Image-Generation
+- A2A
 apis:
 - aid: magichour:magichour-audio-projects-api
   name: Magic Hour Audio Projects API
@@ -218,3 +221,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 30
   pass: local-v2
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://docs.magichour.ai/.well-known/agent-card.json"
+  grade: "conformant"
+  protocol_version: "0.3"
+  control: 404
