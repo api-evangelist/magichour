@@ -26,6 +26,9 @@ created: '2026-08-22'
 modified: '2026-09-03'
 image: https://magichour.ai/logo-social.png
 specificationVersion: '0.23'
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
 - AI Video
 - Image Generation
