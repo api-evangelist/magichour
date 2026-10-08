@@ -75,3 +75,52 @@ notes:
 - Unused prepaid credits never expire (subscriptions and packs).
 - Paid plans remove watermarks, include commercial use, and unlock higher per-tool resolutions (https://docs.magichour.ai/billing/resolution-limits).
 - Credit packs do not carry plan benefits beyond watermark removal.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - subscription
+  units: []
+  plans:
+  - name: Creator
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pro
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Business
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Starter credit pack
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Standard credit pack
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Large credit pack
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Max credit pack
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
