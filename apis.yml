@@ -35,7 +35,7 @@ tags:
 - Audio
 - Generative AI
 - Voice Cloning
-- Text-to-Video
+- Video Generation
 - A2A
 tags_raw:
 - ai video
@@ -46,6 +46,7 @@ tags_raw:
 - text to video
 - Image-Generation
 - A2A
+- Text-to-Video
 apis:
 - aid: magichour:magichour-audio-projects-api
   name: Magic Hour Audio Projects API
