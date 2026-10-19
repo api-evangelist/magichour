@@ -69,3 +69,64 @@
     builder: unknown (not in the directory record)
   status: not-a-workflow
   arazzo: null
+- slug: magichour-go-module-proxy
+  label: Go module proxy
+  partner_name: Go module proxy
+  category: official SDK (Go)
+  type: register
+  channel: package-registry
+  evidence: https://pkg.go.dev/github.com/magichourhq/magic-hour-go
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/magichourhq/magic-hour-go
+      version: v0.86.1
+      released: '2026-10-12'
+      released_field: Time
+      lapsed: false
+      page: https://pkg.go.dev/github.com/magichourhq/magic-hour-go
+      repo_leg: github-org:magichourhq
+      publisher_leg: org:magichourhq
+      matched_by: github-org
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: magichour-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/magic-hour
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: magic-hour
+      version: 0.83.1
+      released: '2026-10-12'
+      released_field: modified
+      lapsed: false
+      page: https://www.npmjs.com/package/magic-hour
+      repo_leg: domain:magichour.ai
+      publisher_leg: email:magichour.ai
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
