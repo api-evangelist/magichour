@@ -1,8 +1,8 @@
 name: Magic Hour MCP servers
 generated: '2026-09-03'
 method: probed
-source: https://mcp.magichour.ai/.well-known/mcp/server-card.json and a live anonymous tools/list POST to https://mcp.magichour.ai/
-  on 2026-09-03; docs server from https://docs.magichour.ai/integration/model-context-protocol.md
+source: https://mcp.magichour.ai/.well-known/mcp/server-card.json and a live anonymous tools/list POST
+  to https://mcp.magichour.ai/ on 2026-09-03; docs server from https://docs.magichour.ai/integration/model-context-protocol.md
 status: official
 deployment:
   mode: remote
@@ -20,13 +20,14 @@ servers:
   auth:
     scheme: bearer
     detail: 'tools/list answers anonymously (probed 200); tool calls require Authorization: Bearer <magic_hour_api_key>.
-      An OAuth shim publishes RFC 8414 authorization-server metadata and an oauth-protected-resource document on
-      the same host (saved under well-known/) with dynamic client registration at /register; the access token is
-      the Magic Hour API key.'
+      An OAuth shim publishes RFC 8414 authorization-server metadata and an oauth-protected-resource document
+      on the same host (saved under well-known/) with dynamic client registration at /register; the access
+      token is the Magic Hour API key.'
   source_code: https://github.com/magichourhq/magic-hour-mcp
-  note: 'FastMCP server generated from the same OpenAPI document, plus composite helpers: wait_for_*_project polling,
-    upload_file_to_presigned_url, and fetch_*_download inline media tools. The server card at /.well-known/mcp/server-card.json
-    carries all 44 tools with input/output schemas. Endpoint is the host ROOT — /mcp on this host 404s.'
+  note: 'FastMCP server generated from the same OpenAPI document, plus composite helpers: wait_for_*_project
+    polling, upload_file_to_presigned_url, and fetch_*_download inline media tools. The server card at
+    /.well-known/mcp/server-card.json carries all 44 tools with input/output schemas. Endpoint is the
+    host ROOT — /mcp on this host 404s.'
 - name: Magic Hour API Docs
   role: documentation
   endpoint: https://docs.magichour.ai/mcp
@@ -36,5 +37,40 @@ servers:
     scheme: none
     detail: anonymous; probed 200 on tools/list
   note: Mintlify-hosted docs MCP server with search_magic_hour_api_docs and query_docs_filesystem_magic_hour_api_docs
-    tools over the documentation and OpenAPI spec. Public landing/setup page at https://magichour.ai/mcp (added
-    2026-08-21 per changelog).
+    tools over the documentation and OpenAPI spec. Public landing/setup page at https://magichour.ai/mcp
+    (added 2026-08-21 per changelog).
+tool_quality:
+  tool_count: 46
+  tokens_total: 48007
+  tokens_per_tool_median: 980
+  heavy_tools:
+  - name: image_to_video_create_video
+    tokens: 2524
+  - name: text_to_video_create_video
+    tokens: 2471
+  - name: video_to_video_create_video
+    tokens: 2101
+  - name: animation_create_video
+    tokens: 2090
+  - name: face_swap_create_video
+    tokens: 2071
+  heavy_tool_count: 17
+  params_total: 163
+  params_undescribed: 33
+  params_described_pct: 79.8
+  tools_with_undescribed_params: 16
+  tools_annotated: 46
+  annotated_pct: 100.0
+  state_changing_unhinted: []
+  tools_missing_schema: 0
+  short_descriptions: 0
+  duplicate_descriptions: 0
+  duplicate_names: 0
+  nonportable_names: []
+  output_schema_count: 37
+  token_estimate: chars/3.6 of each compact tool definition
+  source: mcp/magichour-mcp-tools.json
+  measured: '2026-10-20'
+  scored: false
+  note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
+    from Glimind's agent-readiness audit.
