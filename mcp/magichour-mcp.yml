@@ -74,3 +74,561 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools:
+- name: workflow_guide_retrieve
+  description: Read Magic Hour workflow guidance for face swap, image editing, image-to-video, video generation,
+    lip sync, UGC ads, talking photos or API integration. Returns product and documentation URLs, exact
+    tool names, ordered steps, example requests, follow-up edits and review criteria; does not generate
+    media, spend credits or check account access.
+- name: ping
+  description: Check that the Magic Hour MCP server is reachable.
+- name: wait_for_video_project
+  description: Poll a video project until it completes, errors, is canceled, or times out. After a timeout,
+    resume with the same id; do not create another generation. Returns sanitized download fields. Use
+    `exact_download_urls[n]` or `downloads[n].url` exactly as returned; do not shorten it, remove query
+    parameters, or append expiration metadata. Inline previews share an 8 MiB limit; all download URLs
+    remain available.
+- name: wait_for_image_project
+  description: Poll an image project until it completes, errors, is canceled, or times out. After a timeout,
+    resume with the same id; do not create another generation. Returns the final project JSON and, when
+    complete, attempts to inline image downloads for Inspector or compatible clients. Returns sanitized
+    download fields. Use `exact_download_urls[n]` or `downloads[n].url` exactly as returned; do not shorten
+    it, remove query parameters, or append expiration metadata. Inline previews share an 8 MiB limit;
+    all download URLs remain available.
+- name: wait_for_audio_project
+  description: Poll an audio project until it completes, errors, is canceled, or times out. After a timeout,
+    resume with the same id; do not create another generation. Returns the final project JSON and, when
+    complete, attempts to inline audio downloads for Inspector or compatible clients. Returns sanitized
+    download fields. Use `exact_download_urls[n]` or `downloads[n].url` exactly as returned; do not shorten
+    it, remove query parameters, or append expiration metadata. Inline previews share an 8 MiB limit;
+    all download URLs remain available.
+- name: fetch_image_download
+  description: Fetch a image `downloads[n].url` from a completed image project and return it as inline
+    MCP image content for compatible clients. Pass the exact full signed URL from `downloads[n].url` without
+    trimming query parameters; `expires_at` is separate metadata, not part of the URL. Inline media is
+    capped at 8 MiB; use the signed URL directly for larger downloads.
+- name: fetch_audio_download
+  description: Fetch a audio `downloads[n].url` from a completed audio project and return it as inline
+    MCP audio content for compatible clients. Pass the exact full signed URL from `downloads[n].url` without
+    trimming query parameters; `expires_at` is separate metadata, not part of the URL. Inline media is
+    capped at 8 MiB; use the signed URL directly for larger downloads.
+- name: fetch_video_download
+  description: Fetch a video `downloads[n].url` from a completed video project and return it as an embedded
+    MCP binary resource for compatible clients. Pass the exact full signed URL from `downloads[n].url`
+    without trimming query parameters; `expires_at` is separate metadata, not part of the URL. Inline
+    media is capped at 8 MiB; use the signed URL directly for larger downloads.
+- name: account_retrieve
+  description: Get the current credit balance and subscription details of the account that owns the API
+    key.
+- name: saved_items_list
+  description: Returns active saved items owned by the authenticated account, newest first. Each item
+    includes every saved asset with a durable file_path for reuse in compatible generation APIs and a
+    temporary signed URL for previewing or downloading. Filter by type to find characters, references,
+    voices, moodboards, or brand kits. To fetch the next page, pass the response's next_cursor as cursor.
+- name: video_assets_generate_presigned_url
+  description: "MCP guidance:\n- This only creates presigned upload URLs. For local files, upload the\
+    \ raw bytes to each returned `upload_url` outside the generation call, then pass the matching `file_path`\
+    \ into the create tool.\n- For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint's\
+    \ `file_path` after uploading raw bytes to its presigned URL. Direct public media URLs may work if\
+    \ stable and fetchable as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when\
+    \ unsure.\n\nGenerates a list of pre-signed upload URLs for the assets required. This API is only\
+    \ necessary if you want to upload to Magic Hour's storage. Refer to the [Input Files Guide](https://docs.magichour.ai/integration/inputs-and-outputs)\
+    \ for more details.\n\nThe response array will match the order of items in the request body.\n\n**Valid\
+    \ file extensions per asset type**:\n- video: mp4, m4v, mov, webm\n- audio: mp3, wav, aac, flac, webm,\
+    \ weba, m4a, opus, ogg, oga, aiff, amr\n- image: png, jpg, jpeg, jfif, heic, heif, webp, avif, jp2,\
+    \ tiff, tif, bmp\n- gif: gif, webp, webm\n\n> Note: `gif` is only supported for face swap API `video_file_path`\
+    \ field.\n\nOnce you receive an upload URL, send a `PUT` request to upload the file directly.\n\n\
+    Example:\n\n```\ncurl -X PUT --data '@/path/to/file/video.mp4' \\\n  https://videos.magichour.ai/api-assets/id/video.mp4?<auth\
+    \ params from the API response>\n```"
+- name: face_detection_retrieve_details
+  description: "Get the details of a face detection task. \n\nUse this API to get the list of faces detected\
+    \ in the image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo)\
+    \ or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API\
+    \ calls for multi-face swaps."
+- name: face_detection_detect_faces
+  description: "MCP guidance:\n- This starts an async face-detection task and returns an `id`. Use the\
+    \ face-detection details endpoint with that id to retrieve detected faces before doing individual\
+    \ face swaps.\n- For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint's `file_path`\
+    \ after uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and\
+    \ fetchable as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n\
+    Detect faces in an image or video. \n      \nUse this API to get the list of faces detected in the\
+    \ image or video to use in the [face swap photo](https://docs.magichour.ai/api-reference/image-projects/face-swap-photo)\
+    \ or [face swap video](https://docs.magichour.ai/api-reference/video-projects/face-swap-video) API\
+    \ calls for multi-face swaps.\n\nNote: Face detection is free to use for the near future. Pricing\
+    \ may change in the future."
+- name: video_projects_retrieve_details
+  description: "MCP guidance:\n- Use this after a create tool to poll job status. When status is `complete`,\
+    \ surface the `downloads` URLs to the user; if status is `error`, surface the error message.\n- Each\
+    \ `downloads[n].url` is already the full signed download URL. Use it exactly as returned. Do not shorten\
+    \ it, strip query parameters, or append `expires_at` onto the URL string.\n\nCheck the progress of\
+    \ a video project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n\
+    - `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n\
+    - `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+- name: video_projects_delete
+  description: Permanently delete the rendered video. This action is not reversible, please be sure before
+    deleting.
+- name: ai_talking_photo_create_talking_photo
+  description: 'Use only with the user''s own likeness or content they are authorized to use. Do not use
+    for impersonation, deception, sexual content, or content involving minors.
+
+
+    MCP guidance:
+
+    - Starts an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`
+    with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Create a talking photo video from an image and an audio file.'
+- name: ai_ugc_ad_create_video
+  description: 'MCP guidance:
+
+    - Starts an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`
+    with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Create a spoken UGC video from a prepared image and script. Returns a project ID; poll GET /v1/video-projects/{id}
+    for status and downloads. To compose an image, generate the image separately with the Image Editor
+    API and supply its download URL.'
+- name: ai_video_editor_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n- For `*_file_path`,\
+    \ use an existing Magic Hour path or the upload-URL endpoint's `file_path` after uploading raw bytes\
+    \ to its presigned URL. Direct public media URLs may work if stable and fetchable as raw bytes; hotlinked\
+    \ URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n**What this API does**\n\nCreate the\
+    \ same Video Editor you can make in the browser, but programmatically, so you can automate it, run\
+    \ it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch\
+    \ processing  \n- Adding video editor into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n\
+    1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a video editor job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/ai-video-editor)."
+- name: ai_video_translator_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n- For `*_file_path`,\
+    \ use an existing Magic Hour path or the upload-URL endpoint's `file_path` after uploading raw bytes\
+    \ to its presigned URL. Direct public media URLs may work if stable and fetchable as raw bytes; hotlinked\
+    \ URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n**What this API does**\n\nCreate the\
+    \ same Video Translator you can make in the browser, but programmatically, so you can automate it,\
+    \ run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and\
+    \ batch processing  \n- Adding video translator into apps, pipelines, or tools  \n\n**How it works\
+    \ (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a video translator job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/ai-video-translator)."
+- name: animation_create_video
+  description: 'MCP guidance:
+
+    - Starts an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`
+    with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Create a Animation video. The estimated frame cost is calculated based on the `fps` and `end_seconds`
+    input.'
+- name: audio_to_video_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n- For `*_file_path`,\
+    \ use an existing Magic Hour path or the upload-URL endpoint's `file_path` after uploading raw bytes\
+    \ to its presigned URL. Direct public media URLs may work if stable and fetchable as raw bytes; hotlinked\
+    \ URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n**What this API does**\n\nCreate the\
+    \ same Audio To Video you can make in the browser, but programmatically, so you can automate it, run\
+    \ it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch\
+    \ processing  \n- Adding audio to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n\
+    1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a audio to video job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/audio-to-video)."
+- name: auto_subtitle_generator_create_video
+  description: 'MCP guidance:
+
+    - Starts an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`
+    with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Automatically generate subtitles for your video in multiple languages.'
+- name: character_replace_create_video
+  description: "Use only with the user's own likeness or content they are authorized to use. Do not use\
+    \ for impersonation, deception, sexual content, or content involving minors.\n\nMCP guidance:\n- Starts\
+    \ an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`\
+    \ with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results\
+    \ include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;\
+    \ never append expiration metadata.\n- For `*_file_path`, use an existing Magic Hour path or the upload-URL\
+    \ endpoint's `file_path` after uploading raw bytes to its presigned URL. Direct public media URLs\
+    \ may work if stable and fetchable as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint\
+    \ when unsure.\n\n**What this API does**\n\nCreate the same Character Replace you can make in the\
+    \ browser, but programmatically, so you can automate it, run it at scale, or connect it to your own\
+    \ app or workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding character replace\
+    \ into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image,\
+    \ or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a character replace job with the basic\
+    \ fields.  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\
+    \n**Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type \
+    \ \n- Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/character-replace)."
+- name: face_swap_create_video
+  description: "Use only with the user's own likeness or content they are authorized to use. Do not use\
+    \ for impersonation, deception, sexual content, or content involving minors.\n\nMCP guidance:\n- Starts\
+    \ an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`\
+    \ with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results\
+    \ include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;\
+    \ never append expiration metadata.\n- For `*_file_path`, use an existing Magic Hour path or the upload-URL\
+    \ endpoint's `file_path` after uploading raw bytes to its presigned URL. Direct public media URLs\
+    \ may work if stable and fetchable as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint\
+    \ when unsure.\n\n**What this API does**\n\nCreate the same Face Swap you can make in the browser,\
+    \ but programmatically, so you can automate it, run it at scale, or connect it to your own app or\
+    \ workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding face swap into apps,\
+    \ pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio)\
+    \ with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a face swap job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/face-swap)."
+- name: image_to_video_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n- For `*_file_path`,\
+    \ use an existing Magic Hour path or the upload-URL endpoint's `file_path` after uploading raw bytes\
+    \ to its presigned URL. Direct public media URLs may work if stable and fetchable as raw bytes; hotlinked\
+    \ URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n**What this API does**\n\nCreate the\
+    \ same Image To Video you can make in the browser, but programmatically, so you can automate it, run\
+    \ it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch\
+    \ processing  \n- Adding image to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n\
+    1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a image to video job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/image-to-video)."
+- name: lip_sync_create_video
+  description: "Use only with the user's own likeness or content they are authorized to use. Do not use\
+    \ for impersonation, deception, sexual content, or content involving minors.\n\nMCP guidance:\n- Starts\
+    \ an async video job; returns `id` and `credits_charged`. For finished results, call `wait_for_video_project`\
+    \ with that id or poll `GET /v1/video-projects/{id}` until `complete`, `error`, or `canceled`. Results\
+    \ include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;\
+    \ never append expiration metadata.\n- For `*_file_path`, use an existing Magic Hour path or the upload-URL\
+    \ endpoint's `file_path` after uploading raw bytes to its presigned URL. Direct public media URLs\
+    \ may work if stable and fetchable as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint\
+    \ when unsure.\n\n**What this API does**\n\nCreate the same Lip Sync you can make in the browser,\
+    \ but programmatically, so you can automate it, run it at scale, or connect it to your own app or\
+    \ workflow.\n    \n**Good for**\n- Automation and batch processing  \n- Adding lip sync into apps,\
+    \ pipelines, or tools  \n\n**How it works (3 steps)**\n1) Upload your inputs (video, image, or audio)\
+    \ with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a lip sync job with the basic fields. \
+    \ \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/lip-sync)."
+- name: text_to_video_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n\n**What this API\
+    \ does**\n\nCreate the same Text To Video you can make in the browser, but programmatically, so you\
+    \ can automate it, run it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n\
+    - Automation and batch processing  \n- Adding text to video into apps, pipelines, or tools  \n\n**How\
+    \ it works (3 steps)**\n1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a text to video job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/text-to-video)."
+- name: video_to_video_create_video
+  description: "MCP guidance:\n- Starts an async video job; returns `id` and `credits_charged`. For finished\
+    \ results, call `wait_for_video_project` with that id or poll `GET /v1/video-projects/{id}` until\
+    \ `complete`, `error`, or `canceled`. Results include `downloads`; wait helpers add `exact_download_urls`.\
+    \ Preserve signed URLs and query parameters; never append expiration metadata.\n- For `*_file_path`,\
+    \ use an existing Magic Hour path or the upload-URL endpoint's `file_path` after uploading raw bytes\
+    \ to its presigned URL. Direct public media URLs may work if stable and fetchable as raw bytes; hotlinked\
+    \ URLs can fail. Prefer the upload-URL endpoint when unsure.\n\n**What this API does**\n\nCreate the\
+    \ same Video To Video you can make in the browser, but programmatically, so you can automate it, run\
+    \ it at scale, or connect it to your own app or workflow.\n    \n**Good for**\n- Automation and batch\
+    \ processing  \n- Adding video to video into apps, pipelines, or tools  \n\n**How it works (3 steps)**\n\
+    1) Upload your inputs (video, image, or audio) with [Generate Upload URLs](https://docs.magichour.ai/api-reference/files/generate-asset-upload-urls)\
+    \ and copy the `file_path`.  \n2) Send a request to create a video to video job with the basic fields.\
+    \  \n3) Check the job status until it's `complete`, then download the result from `downloads`.\n\n\
+    **Key options**\n- Inputs: usually a file, sometimes a YouTube link, depending on project type  \n\
+    - Resolution: free users are limited to 576px; higher plans unlock HD and larger sizes  \n- Extra\
+    \ fields: e.g. `face_swap_mode`, `start_seconds`/`end_seconds`, or a text prompt  \n\n**Cost**  \n\
+    Credits are only charged for the frames that actually render. You'll see an estimate when the job\
+    \ is queued, and the final total after it's done.\n\nFor detailed examples, see the [product page](https://magichour.ai/products/video-to-video)."
+- name: image_projects_retrieve_details
+  description: "MCP guidance:\n- Use this after a create tool to poll job status. When status is `complete`,\
+    \ surface the `downloads` URLs to the user; if status is `error`, surface the error message.\n- Each\
+    \ `downloads[n].url` is already the full signed download URL. Use it exactly as returned. Do not shorten\
+    \ it, strip query parameters, or append `expires_at` onto the URL string.\n\nCheck the progress of\
+    \ a image project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n\
+    - `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n\
+    - `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+- name: image_projects_delete
+  description: Permanently delete the rendered image(s). This action is not reversible, please be sure
+    before deleting.
+- name: ai_clothes_changer_create_image
+  description: 'Use only with the user''s own likeness or content they are authorized to use. Do not use
+    for impersonation, deception, sexual content, or content involving minors.
+
+
+    MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Change outfits in photos in seconds with just a photo reference. Each photo costs 25 credits.'
+- name: ai_face_editor_edit_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Edit facial features of an image using AI. Each edit costs 1 frame. The height/width of the output
+    image depends on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page
+    for more details'
+- name: ai_gif_generator_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+
+    Create an AI GIF. Each GIF costs 50 credits.'
+- name: ai_image_editor_create_image
+  description: 'MCP guidance:
+
+    - Requires one or more source images in `assets.image_file_paths`. For prompt-only creation, use `ai_image_generator_create_image`
+    instead.
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Edit images with AI.'
+- name: ai_headshot_generator_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Create an AI headshot. Each headshot costs 50 credits.'
+- name: ai_image_generator_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+
+    Create an AI image with advanced model selection and quality controls.'
+- name: ai_image_upscaler_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Upscale your image using AI. Each 2x upscale costs 50 credits for balanced/creative modes, and 25
+    credits for preserve. 4x upscale costs 200 and 100 credits respectively.'
+- name: ai_meme_generator_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+
+    Create an AI generated meme. Each meme costs 10 credits.'
+- name: ai_qr_code_generator_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+
+    Create an AI QR code. Each QR code costs 0 credits.'
+- name: body_swap_create_image
+  description: 'Use only with the user''s own likeness or content they are authorized to use. Do not use
+    for impersonation, deception, sexual content, or content involving minors.
+
+
+    MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Swap a person into a scene image using Nano Banana 2 Lite (640px/1k) or Nano Banana 2 (2k/4k). Credits
+    depend on `resolution` (from 50 credits at 640px upward).'
+- name: face_swap_photo_create_image
+  description: 'Use only with the user''s own likeness or content they are authorized to use. Do not use
+    for impersonation, deception, sexual content, or content involving minors.
+
+
+    MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Create a face swap photo. Each photo costs 10 credits. The height/width of the output image depends
+    on your subscription. Please refer to our [pricing](https://magichour.ai/pricing) page for more details'
+- name: head_swap_create_image
+  description: 'Use only with the user''s own likeness or content they are authorized to use. Do not use
+    for impersonation, deception, sexual content, or content involving minors.
+
+
+    MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Swap a head onto a body image. Each image costs 10 credits. Output resolution depends on your subscription;
+    you may set `max_resolution` lower than your plan maximum if desired.'
+- name: image_background_remover_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Remove background from image. Each image costs 5 credits.'
+- name: photo_colorizer_create_image
+  description: 'MCP guidance:
+
+    - Starts an async image job; returns `id` and `credits_charged`. For finished results, call `wait_for_image_project`
+    with that id or poll `GET /v1/image-projects/{id}` until `complete`, `error`, or `canceled`. Results
+    include `downloads`; wait helpers add `exact_download_urls`. Preserve signed URLs and query parameters;
+    never append expiration metadata.
+
+    - For `*_file_path`, use an existing Magic Hour path or the upload-URL endpoint''s `file_path` after
+    uploading raw bytes to its presigned URL. Direct public media URLs may work if stable and fetchable
+    as raw bytes; hotlinked URLs can fail. Prefer the upload-URL endpoint when unsure.
+
+
+    Colorize image. Each image costs 10 credits.'
+- name: audio_projects_retrieve_details
+  description: "MCP guidance:\n- Use this after a create tool to poll job status. When status is `complete`,\
+    \ surface the `downloads` URLs to the user; if status is `error`, surface the error message.\n- Each\
+    \ `downloads[n].url` is already the full signed download URL. Use it exactly as returned. Do not shorten\
+    \ it, strip query parameters, or append `expires_at` onto the URL string.\n\nCheck the progress of\
+    \ a audio project. The `downloads` field is populated after a successful render.\n  \n**Statuses**\n\
+    - `queued` — waiting to start\n- `rendering` — in progress\n- `complete` — ready; see `downloads`\n\
+    - `error` — a failure occurred (see `error`)\n- `canceled` — user canceled\n- `draft` — not used"
+- name: audio_projects_delete
+  description: Permanently delete the rendered audio file(s). This action is not reversible, please be
+    sure before deleting.
+tools_count: 46
