@@ -1,4 +1,4 @@
-# magichour
+# Magic Hour
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -63,3 +63,128 @@
 >
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
+
+Magic Hour is an AI media generation platform for video, image and audio, exposed as a public REST API. The contract is an OpenAPI 3.0 document of 33 paths and 36 operations served from api.magichour.ai with bearer authentication, covering generators for headshots, clothes changing, face editing, GIFs, image editing and upscaling, plus video and audio synthesis. Operations are priced in credits and the documentation states the credit cost per call. Magic Hour publishes two llms.txt files — one on the marketing site and a different one on the docs host — plus a 653KB llms-full.txt, and documents an HMAC-SHA256 signed webhook surface with a full event-type reference.
+
+**Areas:** AI Video · Image Generation · Audio · Generative AI · Voice Cloning · Video Generation · A2A
+
+## Magic Hour on APIs.io
+
+Everything profiled for Magic Hour is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/magichour/](https://apis.io/providers/magichour/)** — or go straight to one of the APIs or properties below.
+
+### APIs (4)
+
+- [Magic Hour Audio Projects API](https://apis.io/apis/magichour/magichour-audio-projects-api/) — API related to audio projects
+- [Magic Hour Files API](https://apis.io/apis/magichour/magichour-files-api/) — API related to uploading assets used for video generation
+- [Magic Hour Image Projects API](https://apis.io/apis/magichour/magichour-image-projects-api/) — API related to image projects
+- [Magic Hour Video Projects API](https://apis.io/apis/magichour/magichour-video-projects-api/) — API related to video projects
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Magichour Webhooks](https://apis.io/asyncapis/magichour/magichour-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [Magic Hour MCP servers](https://apis.io/servers/magichour/magic-hour-mcp-servers/)
+
+#### Overlays (4)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Magichour Audio Projects Overlay](https://apis.io/overlays/magichour/magichour-audio-projects-overlay/)
+- [Magichour Files Overlay](https://apis.io/overlays/magichour/magichour-files-overlay/)
+- [Magichour Image Projects Overlay](https://apis.io/overlays/magichour/magichour-image-projects-overlay/)
+- [Magichour Video Projects Overlay](https://apis.io/overlays/magichour/magichour-video-projects-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Magichour Authentication](https://apis.io/security/magichour/magichour-authentication/)
+- [Magichour Domain Security](https://apis.io/security/magichour/magichour-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Magichour Plans Pricing](https://apis.io/plans/magichour/magichour-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Magichour Rate Limits](https://apis.io/rate-limits/magichour/magichour-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://magichour.ai)
+- [Pricing](https://magichour.ai/pricing)
+- [Blog](https://magichour.ai/blog)
+- [Terms of service](https://magichour.ai/terms-of-service)
+- [Privacy policy](https://magichour.ai/privacy-policy)
+- [GitHub](https://github.com/magichourhq)
+
+## API Evangelist rating
+
+**Kin Score 61.6** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 57.6 |
+| Contract governance | 4.5 |
+| Operational transparency | 73.7 |
+| Developer ergonomics | 78.6 |
+| Access clarity | 69.7 |
+
+**Agent readiness 52.3** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 21.9** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/magichour/](https://apis.io/providers/magichour/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Magic Hour: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/magichour/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
